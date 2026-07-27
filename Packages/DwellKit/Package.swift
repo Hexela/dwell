@@ -18,6 +18,8 @@ let package = Package(
         .library(name: "DwellSchemas", targets: ["DwellSchemas"]),
         .library(name: "DwellMQTT", targets: ["DwellMQTT"]),
         .library(name: "DwellMQTTNIO", targets: ["DwellMQTTNIO"]),
+        .library(name: "DwellHistory", targets: ["DwellHistory"]),
+        .library(name: "DwellPersistence", targets: ["DwellPersistence"]),
         .library(name: "DwellIPC", targets: ["DwellIPC"]),
     ],
     dependencies: [
@@ -26,6 +28,10 @@ let package = Package(
             from: "2.13.0"
         ),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.98.0"),
+        .package(
+            url: "https://github.com/groue/GRDB.swift.git",
+            exact: "7.10.0"
+        ),
     ],
     targets: [
         .target(name: "DwellDomain"),
@@ -50,6 +56,19 @@ let package = Package(
                 .product(name: "NIOPosix", package: "swift-nio"),
             ]
         ),
+        .target(
+            name: "DwellHistory",
+            dependencies: [
+                "DwellDomain",
+                "DwellSchemas",
+                "DwellMQTT",
+                .product(name: "GRDB", package: "GRDB.swift"),
+            ]
+        ),
+        .target(
+            name: "DwellPersistence",
+            dependencies: ["DwellDomain"]
+        ),
         .testTarget(
             name: "DwellSchemasTests",
             dependencies: ["DwellSchemas"]
@@ -61,6 +80,14 @@ let package = Package(
         .testTarget(
             name: "DwellMQTTTests",
             dependencies: ["DwellMQTT"]
+        ),
+        .testTarget(
+            name: "DwellHistoryTests",
+            dependencies: ["DwellHistory", "DwellMQTT", "DwellSchemas"]
+        ),
+        .testTarget(
+            name: "DwellPersistenceTests",
+            dependencies: ["DwellPersistence"]
         ),
     ]
 )

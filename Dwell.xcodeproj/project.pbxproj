@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		037C0D995F1D5F118501CFEB /* DwellDomain in Frameworks */ = {isa = PBXBuildFile; productRef = E343B51CE9A9A1E8BEF062C2 /* DwellDomain */; };
+		084B242A28AD1D22E0D7904D /* MetadataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A4E713F47913F921644841 /* MetadataStoreTests.swift */; };
 		152D1C2FBE7F6EF0818A82A3 /* DwellMQTTNIO in Frameworks */ = {isa = PBXBuildFile; productRef = F93A8445C60D4DC658A46258 /* DwellMQTTNIO */; };
 		1AE8057836246EAD4367A930 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88A236162E8069FD23D420C /* main.swift */; };
 		304A46F066C2869255F63E9E /* ServiceStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8151ED798C09156A3981B /* ServiceStatusView.swift */; };
@@ -16,13 +17,16 @@
 		46443E55DED36C6255119AF4 /* DwellXPCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD01753EA2EA6B666B39EF8D /* DwellXPCService.swift */; };
 		4E867746454C4794A4108D45 /* DaemonRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D4649DF3A143E899075DDC /* DaemonRuntime.swift */; };
 		4FA009EE954AC80548DAD03E /* DwellRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D68CADF9DF586D8FAF959CC /* DwellRootView.swift */; };
+		64624289C9488612B8EAFD83 /* DwellPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE1257D255E2CE83C435578 /* DwellPersistence */; };
 		69A05D3D2BFFEB696BAFFA12 /* DwellSchemas in Frameworks */ = {isa = PBXBuildFile; productRef = 37930AE9877FBDB3D77C5425 /* DwellSchemas */; };
 		6F644EE988573A5BDF8B13B2 /* CanonicalMessageDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49574810C72351EF840F958 /* CanonicalMessageDecoderTests.swift */; };
 		76F069323E0105B187359E23 /* DwellIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 461C6CCC5986AE2E0031163C /* DwellIPC */; };
 		7A99783BB963D7088309E35A /* DwellIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 23D635117E5F04A1F877896C /* DwellIPC */; };
+		83B2834429E20AA99CDB8338 /* DwellPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 7B5041C98A1A07C14453F883 /* DwellPersistence */; };
 		968413648612F51524C296DE /* HealthSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428D7B50940297976850A160 /* HealthSnapshotTests.swift */; };
 		9929EB7165D3B4CB380BC724 /* DwellMQTT in Frameworks */ = {isa = PBXBuildFile; productRef = 63DAF42E4F72665B3A708436 /* DwellMQTT */; };
 		9C56483AAABA1BBBD56A2D7E /* DwellIPC in Frameworks */ = {isa = PBXBuildFile; productRef = BC05CA3521586DEC5100E7D9 /* DwellIPC */; };
+		9F92D9B29C16AE515CE476AE /* DaemonStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBA448D2F4FE5177F5ED479 /* DaemonStorage.swift */; };
 		A16E243D2C8233A04EA80B1C /* BrokerSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1454BB8F1B99056F38CB899F /* BrokerSessionTests.swift */; };
 		A3A0834C34DE4D4CF725CFEE /* DwellSchemas in Frameworks */ = {isa = PBXBuildFile; productRef = 8F351E6AA59B893F8926347F /* DwellSchemas */; };
 		AA036ECF5E6410EA4D11564A /* CanonicalTopicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EF58ACF7066114441182BB /* CanonicalTopicTests.swift */; };
@@ -35,9 +39,12 @@
 		C26F9214815B58F966BFEDDB /* DwellIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 2E9FE1126EBE23BFF3B502D5 /* DwellIPC */; };
 		C3E219F1B992EF44B51E5EA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F422BC3BB7901840E7AC467 /* Assets.xcassets */; };
 		CEDFB3167342C7F5DAA348C9 /* CanonicalSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAB1B0EF7F40F4416E403A9 /* CanonicalSchemaTests.swift */; };
+		D42A6CC9AF7225F371C4723F /* DwellHistory in Frameworks */ = {isa = PBXBuildFile; productRef = 0226B99800541898E373D2CB /* DwellHistory */; };
+		D46708B051013D74680705B4 /* HistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC64816DAE384251E69B9D88 /* HistoryStoreTests.swift */; };
 		D64F790AA0D025FE952217EA /* ServiceRegistrationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6F43B223DB0D4FFB4764FE /* ServiceRegistrationState.swift */; };
 		DA24523D3EBE07F875D55090 /* DwellXPCListenerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3548FB2AEC5C690C10E5749 /* DwellXPCListenerDelegate.swift */; };
 		DCE7F30B6C7A26C32D889B8A /* ServiceStatusActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7DE7A69D252809DB3C74BC /* ServiceStatusActions.swift */; };
+		DF064346F2D3BC5A5652936A /* DwellHistory in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7EDB3FEB10D1A92354F4BC /* DwellHistory */; };
 		E858A983C4DC7C964EB45DC3 /* DaemonRuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F9A3A3CD94337C5BD8B22 /* DaemonRuntimeTests.swift */; };
 		E876A5C0BA71388A67BD9D7D /* DwellApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB42DB086B9F5CCFE040860 /* DwellApp.swift */; };
 		F2471C1F5B4731D569659877 /* DwellArchitectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FACA3A018C27E5896064CE /* DwellArchitectureView.swift */; };
@@ -67,6 +74,8 @@
 		443B876B6407C3176738B039 /* DwellCommandLineTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwellCommandLineTool.swift; sourceTree = "<group>"; };
 		7AF28A6A0F38287635825EC6 /* FixtureSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureSupport.swift; sourceTree = "<group>"; };
 		7F7DE7A69D252809DB3C74BC /* ServiceStatusActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceStatusActions.swift; sourceTree = "<group>"; };
+		89A4E713F47913F921644841 /* MetadataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataStoreTests.swift; sourceTree = "<group>"; };
+		8BBA448D2F4FE5177F5ED479 /* DaemonStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonStorage.swift; sourceTree = "<group>"; };
 		8DAB1B0EF7F40F4416E403A9 /* CanonicalSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalSchemaTests.swift; sourceTree = "<group>"; };
 		A75C3664DEC0D9C1267EF45B /* DwellApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DwellApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A88A236162E8069FD23D420C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -76,6 +85,7 @@
 		C05A771A0E65850DA7AD43DA /* JSONSchemaTestValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaTestValidator.swift; sourceTree = "<group>"; };
 		C19CDB96D0F1026201786F58 /* DwellDaemon */ = {isa = PBXFileReference; includeInIndex = 0; path = DwellDaemon; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9EF58ACF7066114441182BB /* CanonicalTopicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalTopicTests.swift; sourceTree = "<group>"; };
+		CC64816DAE384251E69B9D88 /* HistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStoreTests.swift; sourceTree = "<group>"; };
 		D407CD9C06D372820781A80C /* DwellKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DwellKit; path = Packages/DwellKit; sourceTree = SOURCE_ROOT; };
 		DD01753EA2EA6B666B39EF8D /* DwellXPCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwellXPCService.swift; sourceTree = "<group>"; };
 		E2D4649DF3A143E899075DDC /* DaemonRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonRuntime.swift; sourceTree = "<group>"; };
@@ -103,6 +113,8 @@
 				A3A0834C34DE4D4CF725CFEE /* DwellSchemas in Frameworks */,
 				7A99783BB963D7088309E35A /* DwellIPC in Frameworks */,
 				40C4A08747B1C67EC703258E /* DwellMQTT in Frameworks */,
+				DF064346F2D3BC5A5652936A /* DwellHistory in Frameworks */,
+				83B2834429E20AA99CDB8338 /* DwellPersistence in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +135,8 @@
 				9C56483AAABA1BBBD56A2D7E /* DwellIPC in Frameworks */,
 				9929EB7165D3B4CB380BC724 /* DwellMQTT in Frameworks */,
 				152D1C2FBE7F6EF0818A82A3 /* DwellMQTTNIO in Frameworks */,
+				D42A6CC9AF7225F371C4723F /* DwellHistory in Frameworks */,
+				64624289C9488612B8EAFD83 /* DwellPersistence in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				E2D4649DF3A143E899075DDC /* DaemonRuntime.swift */,
+				8BBA448D2F4FE5177F5ED479 /* DaemonStorage.swift */,
 				AA351918B4250F959E35D0EC /* DevelopmentBrokerConfigurationLoader.swift */,
 				F3548FB2AEC5C690C10E5749 /* DwellXPCListenerDelegate.swift */,
 				DD01753EA2EA6B666B39EF8D /* DwellXPCService.swift */,
@@ -153,6 +168,15 @@
 			);
 			name = DwellApp;
 			path = Apps/DwellApp;
+			sourceTree = "<group>";
+		};
+		223FA123DBA7EE1174778C72 /* DwellHistoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				CC64816DAE384251E69B9D88 /* HistoryStoreTests.swift */,
+			);
+			name = DwellHistoryTests;
+			path = Packages/DwellKit/Tests/DwellHistoryTests;
 			sourceTree = "<group>";
 		};
 		5AD1DCD858489EAB82FE90D0 /* DwellIPCTests */ = {
@@ -215,6 +239,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BD0A6C3AE1CB0F6214DF0B6A /* DwellPersistenceTests */ = {
+			isa = PBXGroup;
+			children = (
+				89A4E713F47913F921644841 /* MetadataStoreTests.swift */,
+			);
+			name = DwellPersistenceTests;
+			path = Packages/DwellKit/Tests/DwellPersistenceTests;
+			sourceTree = "<group>";
+		};
 		D1C729375AB37A91A3E709CE /* DwellMQTTTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -230,8 +263,10 @@
 				17ECA4A829285762756ED41E /* DwellApp */,
 				B774D6C8BAD2854FE682AD82 /* DwellCLI */,
 				091AE4176259B54E30E4496E /* DwellDaemon */,
+				223FA123DBA7EE1174778C72 /* DwellHistoryTests */,
 				5AD1DCD858489EAB82FE90D0 /* DwellIPCTests */,
 				D1C729375AB37A91A3E709CE /* DwellMQTTTests */,
+				BD0A6C3AE1CB0F6214DF0B6A /* DwellPersistenceTests */,
 				734800B8FA7AFC72DE5C2F60 /* DwellSchemasTests */,
 				A1E9592B59B00F9A2969882A /* Packages */,
 				A48A89DB5F0B0DD62C3A06D6 /* Service */,
@@ -269,6 +304,8 @@
 				BC05CA3521586DEC5100E7D9 /* DwellIPC */,
 				63DAF42E4F72665B3A708436 /* DwellMQTT */,
 				F93A8445C60D4DC658A46258 /* DwellMQTTNIO */,
+				0226B99800541898E373D2CB /* DwellHistory */,
+				5FE1257D255E2CE83C435578 /* DwellPersistence */,
 			);
 			productName = DwellDaemon;
 			productReference = C19CDB96D0F1026201786F58 /* DwellDaemon */;
@@ -334,6 +371,8 @@
 				8F351E6AA59B893F8926347F /* DwellSchemas */,
 				23D635117E5F04A1F877896C /* DwellIPC */,
 				B8AE8A4211BA38A64EBC7550 /* DwellMQTT */,
+				2F7EDB3FEB10D1A92354F4BC /* DwellHistory */,
+				7B5041C98A1A07C14453F883 /* DwellPersistence */,
 			);
 			productName = DwellProtocolTests;
 			productReference = 19910903E6E50DB90417BA18 /* DwellProtocolTests.xctest */;
@@ -430,6 +469,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F839AF70C95E67502EB424CF /* DaemonRuntime.swift in Sources */,
+				9F92D9B29C16AE515CE476AE /* DaemonStorage.swift in Sources */,
 				BB62EE2F8E86E396423EFA1A /* DevelopmentBrokerConfigurationLoader.swift in Sources */,
 				DA24523D3EBE07F875D55090 /* DwellXPCListenerDelegate.swift in Sources */,
 				46443E55DED36C6255119AF4 /* DwellXPCService.swift in Sources */,
@@ -465,7 +505,9 @@
 				3188D1EDAF307BF58924BEBB /* DwellXPCServiceTests.swift in Sources */,
 				B8488B5CF316CC5586E634A8 /* FixtureSupport.swift in Sources */,
 				968413648612F51524C296DE /* HealthSnapshotTests.swift in Sources */,
+				D46708B051013D74680705B4 /* HistoryStoreTests.swift in Sources */,
 				FE677E3CA4308ED6D7075FF8 /* JSONSchemaTestValidator.swift in Sources */,
+				084B242A28AD1D22E0D7904D /* MetadataStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,6 +845,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0226B99800541898E373D2CB /* DwellHistory */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DwellHistory;
+		};
 		23D635117E5F04A1F877896C /* DwellIPC */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DwellIPC;
@@ -810,6 +856,10 @@
 		2E9FE1126EBE23BFF3B502D5 /* DwellIPC */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DwellIPC;
+		};
+		2F7EDB3FEB10D1A92354F4BC /* DwellHistory */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DwellHistory;
 		};
 		37930AE9877FBDB3D77C5425 /* DwellSchemas */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -819,9 +869,17 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DwellIPC;
 		};
+		5FE1257D255E2CE83C435578 /* DwellPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DwellPersistence;
+		};
 		63DAF42E4F72665B3A708436 /* DwellMQTT */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DwellMQTT;
+		};
+		7B5041C98A1A07C14453F883 /* DwellPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DwellPersistence;
 		};
 		8F351E6AA59B893F8926347F /* DwellSchemas */ = {
 			isa = XCSwiftPackageProductDependency;

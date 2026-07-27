@@ -18,24 +18,27 @@ public enum InboundMessageResult: Sendable {
 public actor CanonicalMessagePipeline {
     private let decoder: CanonicalMessageDecoder
     private let deduplicationCapacity: Int
+    private let durableIngester: (any CanonicalMessageIngesting)?
     private var messageIdentifiers: Set<MessageID> = []
     private var insertionOrder: [MessageID] = []
 
     /// Creates an inbound canonical-message pipeline.
     public init(
         maximumPayloadSize: Int = CanonicalMessageDecoder.defaultMaximumPayloadSize,
-        deduplicationCapacity: Int = 4_096
+        deduplicationCapacity: Int = 4_096,
+        durableIngester: (any CanonicalMessageIngesting)? = nil
     ) {
         precondition(deduplicationCapacity > 0)
         decoder = CanonicalMessageDecoder(maximumPayloadSize: maximumPayloadSize)
         self.deduplicationCapacity = deduplicationCapacity
+        self.durableIngester = durableIngester
     }
 
     /// Validates one transport publication.
     public func process(
         _ publication: MQTTMessage,
         now: Date = Date()
-    ) -> InboundMessageResult {
+    ) async -> InboundMessageResult {
         let topic: CanonicalTopic
         do {
             topic = try CanonicalTopic(parsing: publication.topic)
@@ -52,10 +55,27 @@ public actor CanonicalMessagePipeline {
             return .rejected(code: "invalid-message")
         }
 
-        guard messageIdentifiers.insert(message.messageID).inserted else {
+        guard messageIdentifiers.contains(message.messageID) == false else {
             return .duplicate
         }
 
+        if let durableIngester {
+            do {
+                guard try await durableIngester.ingest(
+                    message,
+                    publication: publication,
+                    receivedAt: now
+                ) else {
+                    return .duplicate
+                }
+            } catch {
+                return .rejected(code: CanonicalMessageIngestionError.unavailable.rawValue)
+            }
+        }
+
+        guard messageIdentifiers.insert(message.messageID).inserted else {
+            return .duplicate
+        }
         insertionOrder.append(message.messageID)
         if insertionOrder.count > deduplicationCapacity {
             messageIdentifiers.remove(insertionOrder.removeFirst())

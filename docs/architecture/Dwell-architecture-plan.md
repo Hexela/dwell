@@ -1097,6 +1097,11 @@ Apple Home/Matter bridge, HomeKit controller, third-party binary plug-ins, iPhon
 4. Prove authenticated XPC handshake and daemon-owned health snapshot.
 5. Connect to Mosquitto; implement retained/LWT/session/reconnect/dedupe harness.
 6. Implement metadata/history migrations and startup reconciliation.
+   **Implemented foundation:** versioned SwiftData installation metadata,
+   GRDB inbox/history/latest-state migrations, restart-safe deduplication,
+   restored-state startup loading, persistence health, and safe-mode fallback.
+   Broker settle-window reconciliation remains part of the first device-registry
+   milestone.
 7. Import one Zigbee temperature sensor and command one dimmable light through canonical MQTT.
 8. Create one durable automation with trace and command acknowledgement.
 9. Complete onboarding happy path and offline-device diagnostic.

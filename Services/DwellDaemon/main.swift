@@ -5,6 +5,8 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import Dispatch
+import DwellDomain
+import DwellHistory
 import DwellIPC
 import DwellMQTT
 import DwellMQTTNIO
@@ -41,35 +43,64 @@ let listener = NSXPCListener(
 listener.delegate = delegate
 listener.activate()
 
-let brokerTask: Task<Void, Never>?
-do {
-    if let brokerConfiguration = try DevelopmentBrokerConfigurationLoader.load() {
-        let brokerSession = BrokerSession(
-            configuration: brokerConfiguration,
-            transportFactory: MQTTNIOTransportFactory(),
-            statusHandler: { status in
-                runtime.updateBrokerStatus(status)
-            }
-        )
-        brokerTask = Task {
-            await brokerSession.run()
+Task {
+    do {
+        let brokerConfiguration = try DevelopmentBrokerConfigurationLoader.load()
+        let installationID = brokerConfiguration.flatMap {
+            DwellIdentifier(rawValue: $0.installationIdentifier)
         }
-    } else {
-        brokerTask = nil
-        runtime.updateBrokerStatus(BrokerStatus(state: .disabled))
-    }
-} catch {
-    brokerTask = nil
-    runtime.update(
-        ComponentHealth(
-            component: .broker,
-            state: .unavailable,
-            summary: "Development broker configuration is invalid"
+        if brokerConfiguration != nil, installationID == nil {
+            throw DaemonStartupError.invalidInstallation
+        }
+        let storage = try await DaemonStorage.open(
+            installationID: installationID,
+            directory: DaemonStorage.defaultDirectory(),
+            runtime: runtime
         )
-    )
-    logger.error("Broker configuration could not be loaded")
-}
-runtime.markReady()
 
-logger.notice("DwellDaemon is ready")
+        if let brokerConfiguration {
+            let pipeline = CanonicalMessagePipeline(
+                durableIngester: storage.history
+            )
+            let brokerSession = BrokerSession(
+                configuration: brokerConfiguration,
+                transportFactory: MQTTNIOTransportFactory(),
+                pipeline: pipeline,
+                statusHandler: { status in
+                    runtime.updateBrokerStatus(status)
+                }
+            )
+            Task {
+                await brokerSession.run()
+            }
+        } else {
+            runtime.updateBrokerStatus(BrokerStatus(state: .disabled))
+        }
+
+        runtime.markReady()
+        logger.notice(
+            "DwellDaemon is ready with \(storage.restoredStateCount) restored states"
+        )
+    } catch {
+        runtime.update(
+            ComponentHealth(
+                component: .historyStore,
+                state: .unavailable,
+                summary: "Persistence unavailable"
+            )
+        )
+        runtime.enterSafeMode(
+            issue: HealthIssue(
+                id: "persistence-startup-failed",
+                summary: "Dwell could not open its stores and is in read-only safe mode."
+            )
+        )
+        logger.error("DwellDaemon entered safe mode during persistence startup")
+    }
+}
+
 dispatchMain()
+
+private enum DaemonStartupError: Error {
+    case invalidInstallation
+}

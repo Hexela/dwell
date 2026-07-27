@@ -2,9 +2,9 @@
 
 Dwell is a native, local-first macOS home-automation platform designed to make capable household automation feel like a polished Apple product rather than a server-administration exercise.
 
-The project is in its architecture and implementation-foundation phase. The
-initial Xcode workspace, executable targets, canonical MQTT topic contract, and
-contract tests are now in place.
+The project is in its always-on-spine implementation phase. The initial Xcode
+workspace, canonical MQTT contract, daemon/XPC foundation, broker lifecycle,
+and daemon-owned persistence stores are now in place.
 
 ## Design principles
 
@@ -56,13 +56,25 @@ local builds so the registered daemon can read it.
 
 This file may contain a development password and must not be committed. Durable
 broker configuration and daemon-owned Keychain credential provisioning will
-replace this temporary development mechanism in the persistence phase.
+replace this temporary development mechanism in a later security stage.
+
+### Daemon persistence
+
+The daemon owns a versioned SwiftData metadata store and a GRDB operational
+store under `/Library/Application Support/Dwell`. Valid canonical MQTT messages
+are committed transactionally to the durable inbox and history before they are
+reported as accepted. Reported state is projected for restart recovery, and
+message-ID deduplication survives process restarts.
+
+For local command-line development, `DWELL_DATA_DIRECTORY` may point the daemon
+at an isolated writable directory. Production clients never open these stores
+directly.
 
 ## Project status
 
-Dwell is pre-alpha. The first implementation phase is establishing the
-canonical MQTT schemas, repository and test harness, background-service
-feasibility, and security boundaries.
+Dwell is pre-alpha. Canonical contracts, background-service health, MQTT
+lifecycle, and the first persistence/reconciliation foundation are implemented.
+Device registry and adapter work have not started.
 
 ## Contributing
 

@@ -56,6 +56,16 @@ final class DaemonRuntime: Sendable {
         }
     }
 
+    func enterSafeMode(issue: HealthIssue) {
+        state.withLock {
+            $0.lifecycle = .safeMode
+            if $0.issues.contains(where: { $0.id == issue.id }) == false {
+                $0.issues.append(issue)
+            }
+            $0.revision += 1
+        }
+    }
+
     func update(_ health: ComponentHealth) {
         state.withLock {
             $0.components[health.component] = health
