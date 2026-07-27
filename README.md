@@ -2,7 +2,9 @@
 
 Dwell is a native, local-first macOS home-automation platform designed to make capable household automation feel like a polished Apple product rather than a server-administration exercise.
 
-The project is currently in its architecture and protocol-definition phase. Application implementation has not started.
+The project is in its architecture and implementation-foundation phase. The
+initial Xcode workspace, executable targets, canonical MQTT topic contract, and
+contract tests are now in place.
 
 ## Design principles
 
@@ -28,9 +30,26 @@ The accepted implementation baseline is documented in:
 - Xcode 26 or later
 - Swift 6
 
+## Development
+
+Open [`Dwell.xcworkspace`](Dwell.xcworkspace) in Xcode. The shared `Dwell`
+scheme builds the management app, daemon foundation, and `dwellctl` command-line
+tool together. Individual schemes are also available for each executable.
+
+The checked-in Xcode project is generated from [`project.yml`](project.yml)
+using [XcodeGen](https://github.com/yonaskolb/XcodeGen). After changing targets,
+source groups, package dependencies, or build settings, regenerate it from the
+repository root:
+
+```sh
+xcodegen generate --spec project.yml
+```
+
 ## Project status
 
-Dwell is pre-alpha. The first implementation phase will establish the canonical MQTT schemas, repository and test harness, background-service feasibility, and security boundaries.
+Dwell is pre-alpha. The first implementation phase is establishing the
+canonical MQTT schemas, repository and test harness, background-service
+feasibility, and security boundaries.
 
 ## Contributing
 
@@ -41,4 +60,3 @@ Contributions and design discussion are welcome. Please read [CONTRIBUTING.md](C
 Dwell is licensed under the [Mozilla Public License 2.0](LICENSE).
 
 Copyright © Hexela.
-
