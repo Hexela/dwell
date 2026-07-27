@@ -32,7 +32,10 @@ struct DwellCommandLineTool {
             print("Version: \(snapshot.serviceVersion)")
             print("Revision: \(snapshot.revision)")
             for component in snapshot.components {
-                print("\(component.component.rawValue): \(component.state.rawValue)")
+                print(
+                    "\(component.component.rawValue): "
+                        + "\(component.state.rawValue) — \(component.summary)"
+                )
             }
         } catch {
             print("Dwell daemon is unavailable: \(error)")

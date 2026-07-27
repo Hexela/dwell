@@ -19,6 +19,7 @@ Package.resolved
 !.env.example
 .dwell-local/
 Config/Local/
+Config/development-broker.json
 *.p12
 *.mobileprovision
 
@@ -26,4 +27,3 @@ Config/Local/
 artifacts/
 coverage/
 *.log
-

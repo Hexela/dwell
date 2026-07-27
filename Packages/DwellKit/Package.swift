@@ -16,7 +16,16 @@ let package = Package(
     products: [
         .library(name: "DwellDomain", targets: ["DwellDomain"]),
         .library(name: "DwellSchemas", targets: ["DwellSchemas"]),
+        .library(name: "DwellMQTT", targets: ["DwellMQTT"]),
+        .library(name: "DwellMQTTNIO", targets: ["DwellMQTTNIO"]),
         .library(name: "DwellIPC", targets: ["DwellIPC"]),
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/swift-server-community/mqtt-nio.git",
+            from: "2.13.0"
+        ),
+        .package(url: "https://github.com/apple/swift-nio.git", from: "2.98.0"),
     ],
     targets: [
         .target(name: "DwellDomain"),
@@ -28,6 +37,19 @@ let package = Package(
             name: "DwellIPC",
             dependencies: ["DwellDomain"]
         ),
+        .target(
+            name: "DwellMQTT",
+            dependencies: ["DwellDomain", "DwellSchemas"]
+        ),
+        .target(
+            name: "DwellMQTTNIO",
+            dependencies: [
+                "DwellMQTT",
+                .product(name: "MQTTNIO", package: "mqtt-nio"),
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOPosix", package: "swift-nio"),
+            ]
+        ),
         .testTarget(
             name: "DwellSchemasTests",
             dependencies: ["DwellSchemas"]
@@ -35,6 +57,10 @@ let package = Package(
         .testTarget(
             name: "DwellIPCTests",
             dependencies: ["DwellIPC"]
+        ),
+        .testTarget(
+            name: "DwellMQTTTests",
+            dependencies: ["DwellMQTT"]
         ),
     ]
 )

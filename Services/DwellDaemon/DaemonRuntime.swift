@@ -5,6 +5,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import DwellIPC
+import DwellMQTT
 import Foundation
 import Synchronization
 
@@ -60,6 +61,48 @@ final class DaemonRuntime: Sendable {
             $0.components[health.component] = health
             $0.revision += 1
         }
+    }
+
+    func updateBrokerStatus(_ status: BrokerStatus) {
+        let health: ComponentHealth
+        switch status.state {
+        case .disabled:
+            health = ComponentHealth(
+                component: .broker,
+                state: .notConfigured,
+                summary: "Not configured"
+            )
+        case .connecting:
+            health = ComponentHealth(
+                component: .broker,
+                state: .degraded,
+                summary: "Connecting"
+            )
+        case .online:
+            health = ComponentHealth(
+                component: .broker,
+                state: .healthy,
+                summary: [
+                    "Online",
+                    "\(status.acceptedMessageCount) accepted",
+                    "\(status.duplicateMessageCount) duplicates",
+                    "\(status.rejectedMessageCount) rejected",
+                ].joined(separator: " · ")
+            )
+        case .reconnecting:
+            health = ComponentHealth(
+                component: .broker,
+                state: .degraded,
+                summary: "Reconnecting (attempt \(status.reconnectCount))"
+            )
+        case .stopped:
+            health = ComponentHealth(
+                component: .broker,
+                state: .unavailable,
+                summary: "Stopped"
+            )
+        }
+        update(health)
     }
 
     func snapshot(

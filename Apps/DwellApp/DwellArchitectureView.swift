@@ -45,7 +45,7 @@ struct DwellArchitectureView: View {
             return
         }
 
-        await serviceStatus.refresh()
+        await serviceStatus.monitor()
     }
 }
 

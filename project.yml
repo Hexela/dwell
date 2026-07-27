@@ -40,6 +40,7 @@ targets:
       - package: DwellKit
         product: DwellIPC
       - target: DwellDaemon
+        embed: false
     postBuildScripts:
       - name: Embed LaunchDaemon
         basedOnDependencyAnalysis: false
@@ -50,6 +51,22 @@ targets:
           /bin/mkdir -p "${daemon_directory}" "${plist_directory}"
           /usr/bin/ditto "${BUILT_PRODUCTS_DIR}/DwellDaemon" "${daemon_directory}/DwellDaemon"
           /usr/bin/ditto "${SRCROOT}/Config/LaunchDaemons/com.hexela.dwell.daemon.plist" "${plist_directory}/com.hexela.dwell.daemon.plist"
+          local_broker_configuration="${SRCROOT}/Config/Local/development-broker.json"
+          fallback_broker_configuration="${SRCROOT}/Config/development-broker.json"
+          broker_configuration=""
+          if [ -f "${local_broker_configuration}" ]; then
+            broker_configuration="${local_broker_configuration}"
+          elif [ -f "${fallback_broker_configuration}" ]; then
+            broker_configuration="${fallback_broker_configuration}"
+          fi
+          if [ -n "${broker_configuration}" ]; then
+            resources_directory="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Resources"
+            /bin/mkdir -p "${resources_directory}"
+            /usr/bin/ditto "${broker_configuration}" "${resources_directory}/development-broker.json"
+            echo "Embedded MQTT broker configuration from ${broker_configuration}"
+          else
+            echo "No development MQTT broker configuration found"
+          fi
     settings:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -67,6 +84,10 @@ targets:
     dependencies:
       - package: DwellKit
         product: DwellIPC
+      - package: DwellKit
+        product: DwellMQTT
+      - package: DwellKit
+        product: DwellMQTTNIO
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.daemon
@@ -91,6 +112,7 @@ targets:
     sources:
       - path: Packages/DwellKit/Tests/DwellSchemasTests
       - path: Packages/DwellKit/Tests/DwellIPCTests
+      - path: Packages/DwellKit/Tests/DwellMQTTTests
       - path: Tests/Service
       - path: Services/DwellDaemon/DaemonRuntime.swift
       - path: Services/DwellDaemon/DwellXPCService.swift
@@ -101,6 +123,8 @@ targets:
         product: DwellSchemas
       - package: DwellKit
         product: DwellIPC
+      - package: DwellKit
+        product: DwellMQTT
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.tests.protocol

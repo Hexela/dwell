@@ -30,14 +30,35 @@ final class ServiceStatusModel {
     }
 
     func refresh() async {
+        await refresh(showsProgress: true)
+    }
+
+    func monitor() async {
+        while Task.isCancelled == false {
+            await refresh(showsProgress: false)
+            do {
+                try await ContinuousClock().sleep(for: .seconds(2))
+            } catch {
+                return
+            }
+        }
+    }
+
+    private func refresh(showsProgress: Bool) async {
         updateRegistrationState()
         guard registrationState == .enabled else {
             snapshot = nil
             return
         }
 
-        isWorking = true
-        defer { isWorking = false }
+        if showsProgress {
+            isWorking = true
+        }
+        defer {
+            if showsProgress {
+                isWorking = false
+            }
+        }
 
         do {
             snapshot = try await client.healthSnapshot()

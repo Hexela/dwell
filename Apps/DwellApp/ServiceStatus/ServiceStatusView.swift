@@ -28,7 +28,7 @@ struct ServiceStatusView: View {
                 ForEach(snapshot.components) { component in
                     LabeledContent(
                         component.component.title,
-                        value: component.state.title
+                        value: "\(component.state.title) — \(component.summary)"
                     )
                 }
             }

@@ -1,0 +1,10 @@
+{
+  "host": "broker.example",
+  "port": 8883,
+  "clientIdentifier": "dwell-home-a",
+  "installationIdentifier": "home-a",
+  "protocolVersion": "5.0",
+  "usesTLS": true,
+  "username": "dwell",
+  "password": "replace-in-ignored-local-copy"
+}

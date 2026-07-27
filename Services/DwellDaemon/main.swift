@@ -6,6 +6,8 @@
 
 import Dispatch
 import DwellIPC
+import DwellMQTT
+import DwellMQTTNIO
 import Foundation
 import OSLog
 
@@ -38,6 +40,35 @@ let listener = NSXPCListener(
 )
 listener.delegate = delegate
 listener.activate()
+
+let brokerTask: Task<Void, Never>?
+do {
+    if let brokerConfiguration = try DevelopmentBrokerConfigurationLoader.load() {
+        let brokerSession = BrokerSession(
+            configuration: brokerConfiguration,
+            transportFactory: MQTTNIOTransportFactory(),
+            statusHandler: { status in
+                runtime.updateBrokerStatus(status)
+            }
+        )
+        brokerTask = Task {
+            await brokerSession.run()
+        }
+    } else {
+        brokerTask = nil
+        runtime.updateBrokerStatus(BrokerStatus(state: .disabled))
+    }
+} catch {
+    brokerTask = nil
+    runtime.update(
+        ComponentHealth(
+            component: .broker,
+            state: .unavailable,
+            summary: "Development broker configuration is invalid"
+        )
+    )
+    logger.error("Broker configuration could not be loaded")
+}
 runtime.markReady()
 
 logger.notice("DwellDaemon is ready")

@@ -45,6 +45,19 @@ repository root:
 xcodegen generate --spec project.yml
 ```
 
+### Development MQTT broker
+
+The daemon can connect to an existing MQTT 3.1.1 or MQTT 5 broker during local
+development. Copy `Config/development-broker.example.json` to the ignored path
+`Config/development-broker.json`, then replace the example values. The
+`Config/Local/development-broker.json` path is also supported and takes
+precedence when both exist. Xcode embeds the selected ignored file only in
+local builds so the registered daemon can read it.
+
+This file may contain a development password and must not be committed. Durable
+broker configuration and daemon-owned Keychain credential provisioning will
+replace this temporary development mechanism in the persistence phase.
+
 ## Project status
 
 Dwell is pre-alpha. The first implementation phase is establishing the
