@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct DwellArchitectureView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @State private var serviceStatus = ServiceStatusModel()
 
     var body: some View {
@@ -34,9 +35,17 @@ struct DwellArchitectureView: View {
         }
         .formStyle(.grouped)
         .navigationTitle("Architecture")
-        .task {
-            await serviceStatus.refresh()
+        .task(id: scenePhase) {
+            await refreshServiceStatusWhenActive()
         }
+    }
+
+    private func refreshServiceStatusWhenActive() async {
+        guard scenePhase == .active else {
+            return
+        }
+
+        await serviceStatus.refresh()
     }
 }
 
