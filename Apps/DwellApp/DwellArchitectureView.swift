@@ -7,6 +7,8 @@
 import SwiftUI
 
 struct DwellArchitectureView: View {
+    @State private var serviceStatus = ServiceStatusModel()
+
     var body: some View {
         Form {
             Section("Project foundation") {
@@ -22,11 +24,19 @@ struct DwellArchitectureView: View {
                     systemImage: "checkmark.circle.fill"
                 )
                     .foregroundStyle(.green)
-                Label("Daemon and client communication is not yet connected", systemImage: "circle.dotted")
+                Label(
+                    "XPC health is available after daemon registration",
+                    systemImage: "network"
+                )
             }
+
+            ServiceStatusView(model: serviceStatus)
         }
         .formStyle(.grouped)
         .navigationTitle("Architecture")
+        .task {
+            await serviceStatus.refresh()
+        }
     }
 }
 

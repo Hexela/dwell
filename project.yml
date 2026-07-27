@@ -37,6 +37,19 @@ targets:
         product: DwellDomain
       - package: DwellKit
         product: DwellSchemas
+      - package: DwellKit
+        product: DwellIPC
+      - target: DwellDaemon
+    postBuildScripts:
+      - name: Embed LaunchDaemon
+        basedOnDependencyAnalysis: false
+        script: |
+          set -eu
+          daemon_directory="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LaunchServices"
+          plist_directory="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LaunchDaemons"
+          /bin/mkdir -p "${daemon_directory}" "${plist_directory}"
+          /usr/bin/ditto "${BUILT_PRODUCTS_DIR}/DwellDaemon" "${daemon_directory}/DwellDaemon"
+          /usr/bin/ditto "${SRCROOT}/Config/LaunchDaemons/com.hexela.dwell.daemon.plist" "${plist_directory}/com.hexela.dwell.daemon.plist"
     settings:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -53,9 +66,7 @@ targets:
       - path: Services/DwellDaemon
     dependencies:
       - package: DwellKit
-        product: DwellDomain
-      - package: DwellKit
-        product: DwellSchemas
+        product: DwellIPC
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.daemon
@@ -68,9 +79,7 @@ targets:
       - path: Tools/DwellCLI
     dependencies:
       - package: DwellKit
-        product: DwellDomain
-      - package: DwellKit
-        product: DwellSchemas
+        product: DwellIPC
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.cli
@@ -81,11 +90,17 @@ targets:
     platform: macOS
     sources:
       - path: Packages/DwellKit/Tests/DwellSchemasTests
+      - path: Packages/DwellKit/Tests/DwellIPCTests
+      - path: Tests/Service
+      - path: Services/DwellDaemon/DaemonRuntime.swift
+      - path: Services/DwellDaemon/DwellXPCService.swift
     dependencies:
       - package: DwellKit
         product: DwellDomain
       - package: DwellKit
         product: DwellSchemas
+      - package: DwellKit
+        product: DwellIPC
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.tests.protocol

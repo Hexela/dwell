@@ -16,6 +16,7 @@ let package = Package(
     products: [
         .library(name: "DwellDomain", targets: ["DwellDomain"]),
         .library(name: "DwellSchemas", targets: ["DwellSchemas"]),
+        .library(name: "DwellIPC", targets: ["DwellIPC"]),
     ],
     targets: [
         .target(name: "DwellDomain"),
@@ -23,9 +24,17 @@ let package = Package(
             name: "DwellSchemas",
             dependencies: ["DwellDomain"]
         ),
+        .target(
+            name: "DwellIPC",
+            dependencies: ["DwellDomain"]
+        ),
         .testTarget(
             name: "DwellSchemasTests",
             dependencies: ["DwellSchemas"]
+        ),
+        .testTarget(
+            name: "DwellIPCTests",
+            dependencies: ["DwellIPC"]
         ),
     ]
 )
