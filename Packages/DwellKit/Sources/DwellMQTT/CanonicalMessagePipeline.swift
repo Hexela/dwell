@@ -9,7 +9,7 @@ import Foundation
 
 /// The result of validating and deduplicating an inbound publication.
 public enum InboundMessageResult: Sendable {
-    case accepted(CanonicalMessage)
+    case accepted(CanonicalMessage, topic: CanonicalTopic)
     case duplicate
     case rejected(code: String)
 }
@@ -80,6 +80,6 @@ public actor CanonicalMessagePipeline {
         if insertionOrder.count > deduplicationCapacity {
             messageIdentifiers.remove(insertionOrder.removeFirst())
         }
-        return .accepted(message)
+        return .accepted(message, topic: topic)
     }
 }

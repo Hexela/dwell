@@ -20,6 +20,8 @@ let package = Package(
         .library(name: "DwellMQTTNIO", targets: ["DwellMQTTNIO"]),
         .library(name: "DwellHistory", targets: ["DwellHistory"]),
         .library(name: "DwellPersistence", targets: ["DwellPersistence"]),
+        .library(name: "DwellRegistry", targets: ["DwellRegistry"]),
+        .library(name: "DwellZigbee", targets: ["DwellZigbee"]),
         .library(name: "DwellIPC", targets: ["DwellIPC"]),
     ],
     dependencies: [
@@ -69,6 +71,14 @@ let package = Package(
             name: "DwellPersistence",
             dependencies: ["DwellDomain"]
         ),
+        .target(
+            name: "DwellRegistry",
+            dependencies: ["DwellDomain", "DwellSchemas"]
+        ),
+        .target(
+            name: "DwellZigbee",
+            dependencies: ["DwellDomain"]
+        ),
         .testTarget(
             name: "DwellSchemasTests",
             dependencies: ["DwellSchemas"]
@@ -88,6 +98,14 @@ let package = Package(
         .testTarget(
             name: "DwellPersistenceTests",
             dependencies: ["DwellPersistence"]
+        ),
+        .testTarget(
+            name: "DwellRegistryTests",
+            dependencies: ["DwellRegistry", "DwellSchemas"]
+        ),
+        .testTarget(
+            name: "DwellZigbeeTests",
+            dependencies: ["DwellZigbee", "DwellSchemas"]
         ),
     ]
 )

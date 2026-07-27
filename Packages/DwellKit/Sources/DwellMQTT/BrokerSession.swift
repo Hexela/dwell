@@ -8,7 +8,7 @@ import Foundation
 /// Owns connection, subscription, validation, and reconnection for one broker.
 public actor BrokerSession {
     public typealias StatusHandler = @Sendable (BrokerStatus) -> Void
-    public typealias MessageHandler = @Sendable (InboundMessageResult) -> Void
+    public typealias MessageHandler = @Sendable (InboundMessageResult) async -> Void
 
     private let configuration: BrokerConfiguration
     private let transportFactory: any MQTTTransportFactory
@@ -101,7 +101,7 @@ public actor BrokerSession {
                 }
                 let result = await pipeline.process(publication)
                 record(result)
-                messageHandler(result)
+                await messageHandler(result)
             }
 
             throw BrokerSessionError.connectionClosed
@@ -110,6 +110,14 @@ public actor BrokerSession {
             activeTransport = nil
             throw error
         }
+    }
+
+    /// Publishes an outbound canonical message on the active connection.
+    public func publish(_ payload: Data, to topic: String) async throws {
+        guard let activeTransport else {
+            throw BrokerSessionError.notConnected
+        }
+        try await activeTransport.publish(payload, to: topic, retain: false)
     }
 
     private func record(_ result: InboundMessageResult) {
@@ -168,4 +176,5 @@ public actor BrokerSession {
 /// Stable broker-session failures.
 public enum BrokerSessionError: String, Error, Sendable {
     case connectionClosed = "connection-closed"
+    case notConnected = "not-connected"
 }

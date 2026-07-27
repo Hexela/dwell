@@ -10,6 +10,8 @@ import DwellHistory
 import DwellIPC
 import DwellMQTT
 import DwellMQTTNIO
+import DwellRegistry
+import DwellSchemas
 import Foundation
 import OSLog
 
@@ -21,7 +23,13 @@ let serviceVersion =
     Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
         as? String ?? "0.1.0"
 let runtime = DaemonRuntime(serviceVersion: serviceVersion)
-let service = DwellXPCService(runtime: runtime)
+let registry = DeviceRegistry()
+let commandDispatcher = DeviceCommandDispatcher()
+let service = DwellXPCService(
+    runtime: runtime,
+    registry: registry,
+    commandDispatcher: commandDispatcher
+)
 
 // Release builds must inject a Team-ID-anchored requirement. The identifier-only
 // default keeps local ad-hoc development builds usable while still constraining
@@ -57,6 +65,17 @@ Task {
             directory: DaemonStorage.defaultDirectory(),
             runtime: runtime
         )
+        for persistedState in try await storage.history.latestStates() {
+            guard let topic = try? CanonicalTopic(parsing: persistedState.topic),
+                  let message = try? CanonicalMessageDecoder().decode(
+                      persistedState.payload,
+                      for: topic
+                  )
+            else {
+                continue
+            }
+            await registry.ingest(message, from: topic)
+        }
 
         if let brokerConfiguration {
             let pipeline = CanonicalMessagePipeline(
@@ -68,7 +87,18 @@ Task {
                 pipeline: pipeline,
                 statusHandler: { status in
                     runtime.updateBrokerStatus(status)
+                },
+                messageHandler: { result in
+                    guard case let .accepted(message, topic) = result else {
+                        return
+                    }
+                    await registry.ingest(message, from: topic)
                 }
+            )
+            await commandDispatcher.configure(
+                installationID: installationID!,
+                history: storage.history,
+                brokerSession: brokerSession
             )
             Task {
                 await brokerSession.run()

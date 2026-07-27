@@ -74,7 +74,12 @@ directly.
 
 Dwell is pre-alpha. Canonical contracts, background-service health, MQTT
 lifecycle, and the first persistence/reconciliation foundation are implemented.
-Device registry and adapter work have not started.
+The first useful-device slice now restores canonical sensor/light state into an
+actor-owned registry, exposes device snapshots through signed XPC, and presents
+them in a native Devices screen. Ordinary on/off light requests are persisted
+before non-retained MQTT publication. A Zigbee2MQTT translator has canonical
+conformance coverage for temperature, on/off, and brightness payloads; managed
+adapter supervision and discovery metadata remain follow-up work.
 
 ## Contributing
 

@@ -5,6 +5,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 @preconcurrency import Foundation
+import DwellDomain
 import Synchronization
 
 /// A client for the privileged local Dwell Mach service.
@@ -20,6 +21,57 @@ public actor XPCDwellServiceClient: DwellServiceClient {
 
     /// Requests the daemon's current health snapshot.
     public func healthSnapshot() async throws -> HealthSnapshot {
+        try await request(
+            HealthSnapshotRequest(protocolVersion: .v1, role: role),
+            operation: { service, data, reply in
+                service.healthSnapshot(data, withReply: reply)
+            },
+            decode: HealthSnapshotResponse.self
+        ) { response in
+            response.snapshot
+        }
+    }
+
+    public func deviceSnapshot() async throws -> DeviceCollectionSnapshot {
+        try await request(
+            DeviceSnapshotRequest(protocolVersion: .v1, role: role),
+            operation: { service, data, reply in
+                service.deviceSnapshot(data, withReply: reply)
+            },
+            decode: DeviceSnapshotResponse.self
+        ) { response in
+            response.snapshot
+        }
+    }
+
+    public func perform(
+        _ command: DeviceCommandRequest
+    ) async throws -> DeviceCommandAcceptance {
+        try await request(
+            DeviceCommandWireRequest(
+                protocolVersion: .v1,
+                role: role,
+                command: command
+            ),
+            operation: { service, data, reply in
+                service.performDeviceCommand(data, withReply: reply)
+            },
+            decode: DeviceCommandWireResponse.self
+        ) { response in
+            response.acceptance
+        }
+    }
+
+    private func request<Request: Encodable, Response: Decodable, Value: Sendable>(
+        _ request: Request,
+        operation: @escaping (
+            DwellXPCWireService,
+            Data,
+            @escaping (Data?, NSError?) -> Void
+        ) -> Void,
+        decode: Response.Type,
+        value: @escaping (Response) -> Value?
+    ) async throws -> Value {
         let connection = NSXPCConnection(
             machServiceName: DwellServiceConstants.machServiceName,
             options: .privileged
@@ -33,10 +85,6 @@ public actor XPCDwellServiceClient: DwellServiceClient {
             connection.invalidate()
         }
 
-        let request = HealthSnapshotRequest(
-            protocolVersion: .v1,
-            role: role
-        )
         let requestData = try JSONEncoder().encode(request)
 
         return try await withCheckedThrowingContinuation { continuation in
@@ -50,21 +98,21 @@ public actor XPCDwellServiceClient: DwellServiceClient {
                 return
             }
 
-            service.healthSnapshot(requestData) { data, error in
+            operation(service, requestData) { data, error in
                 guard error == nil, let data else {
                     gate.resume(throwing: ServiceRequestError.serviceUnavailable)
                     return
                 }
 
                 do {
-                    let response = try JSONDecoder().decode(
-                        HealthSnapshotResponse.self,
-                        from: data
-                    )
-                    if let error = response.error {
+                    let response = try JSONDecoder().decode(decode, from: data)
+                    if let result = value(response) {
+                        gate.resume(returning: result)
+                    } else if let error = (response as? HealthSnapshotResponse)?.error
+                        ?? (response as? DeviceSnapshotResponse)?.error
+                        ?? (response as? DeviceCommandWireResponse)?.error
+                    {
                         gate.resume(throwing: error)
-                    } else if let snapshot = response.snapshot {
-                        gate.resume(returning: snapshot)
                     } else {
                         gate.resume(throwing: ServiceRequestError.malformedResponse)
                     }

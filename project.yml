@@ -92,6 +92,10 @@ targets:
         product: DwellHistory
       - package: DwellKit
         product: DwellPersistence
+      - package: DwellKit
+        product: DwellRegistry
+      - package: DwellKit
+        product: DwellSchemas
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.daemon
@@ -119,9 +123,12 @@ targets:
       - path: Packages/DwellKit/Tests/DwellMQTTTests
       - path: Packages/DwellKit/Tests/DwellHistoryTests
       - path: Packages/DwellKit/Tests/DwellPersistenceTests
+      - path: Packages/DwellKit/Tests/DwellRegistryTests
+      - path: Packages/DwellKit/Tests/DwellZigbeeTests
       - path: Tests/Service
       - path: Services/DwellDaemon/DaemonRuntime.swift
       - path: Services/DwellDaemon/DwellXPCService.swift
+      - path: Services/DwellDaemon/DeviceCommandDispatcher.swift
     dependencies:
       - package: DwellKit
         product: DwellDomain
@@ -135,6 +142,10 @@ targets:
         product: DwellHistory
       - package: DwellKit
         product: DwellPersistence
+      - package: DwellKit
+        product: DwellRegistry
+      - package: DwellKit
+        product: DwellZigbee
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.tests.protocol

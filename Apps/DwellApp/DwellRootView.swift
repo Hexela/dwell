@@ -7,24 +7,41 @@
 import SwiftUI
 
 struct DwellRootView: View {
+    private enum Destination: String, CaseIterable, Identifiable {
+        case home
+        case devices
+        case integrations
+
+        var id: Self { self }
+    }
+
+    @State private var selection: Destination? = .home
+
     var body: some View {
         NavigationSplitView {
-            List {
+            List(selection: $selection) {
                 Label("Home", systemImage: "house")
-                Label("Rooms", systemImage: "square.grid.2x2")
+                    .tag(Destination.home)
                 Label("Devices", systemImage: "lightbulb.2")
-                Label("Automations", systemImage: "point.3.connected.trianglepath.dotted")
-                Label("Activity", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                    .tag(Destination.devices)
                 Label("Integrations", systemImage: "puzzlepiece.extension")
+                    .tag(Destination.integrations)
             }
             .navigationTitle("Dwell")
         } content: {
-            ContentUnavailableView(
-                "Your home will appear here",
-                systemImage: "house",
-                description: Text("The project foundation is ready for onboarding and daemon health.")
-            )
-            .navigationTitle("Home")
+            switch selection {
+            case .devices:
+                DeviceListView()
+            case .home, .integrations, nil:
+                ContentUnavailableView(
+                    "Your home will appear here",
+                    systemImage: "house",
+                    description: Text(
+                        "Open Devices to inspect canonical state from the daemon."
+                    )
+                )
+                .navigationTitle("Home")
+            }
         } detail: {
             DwellArchitectureView()
         }

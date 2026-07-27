@@ -1103,6 +1103,12 @@ Apple Home/Matter bridge, HomeKit controller, third-party binary plug-ins, iPhon
    Broker settle-window reconciliation remains part of the first device-registry
    milestone.
 7. Import one Zigbee temperature sensor and command one dimmable light through canonical MQTT.
+   **Implemented foundation:** ordered device-state registry, persisted-state
+   restoration, versioned XPC snapshots, native device list, durable ordinary
+   on/off command publication, and canonical Zigbee2MQTT translation for
+   temperature, on/off, and brightness. Discovery metadata, managed adapter
+   supervision, brightness controls, and acknowledgement presentation remain
+   before this milestone is complete.
 8. Create one durable automation with trace and command acknowledgement.
 9. Complete onboarding happy path and offline-device diagnostic.
 10. Run 72-hour then seven-day soak before beta.
