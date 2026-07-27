@@ -1,0 +1,12 @@
+# Default ownership
+* @dominictristram
+
+# Architecture, protocol, persistence, and security-sensitive areas
+/docs/architecture/ @dominictristram
+/Schemas/ @dominictristram
+/Services/DwellDaemon/ @dominictristram
+/Packages/DwellKit/Sources/DwellSchemas/ @dominictristram
+/Packages/DwellKit/Sources/DwellPersistence/ @dominictristram
+/Packages/DwellKit/Sources/DwellHistory/ @dominictristram
+/.github/ @dominictristram
+
