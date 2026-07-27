@@ -79,7 +79,10 @@ actor-owned registry, exposes device snapshots through signed XPC, and presents
 them in a native Devices screen. Ordinary on/off light requests are persisted
 before non-retained MQTT publication. A Zigbee2MQTT translator has canonical
 conformance coverage for temperature, on/off, and brightness payloads; managed
-adapter supervision and discovery metadata remain follow-up work.
+adapter execution now subscribes to live Zigbee2MQTT topics, maps IEEE
+addresses to stable Dwell IDs, republishes retained canonical state, and
+forwards supported light commands. Discovery metadata, bounded crash restart,
+and command acknowledgement presentation remain follow-up work.
 
 ## Contributing
 

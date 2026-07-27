@@ -21,6 +21,35 @@ public struct ZigbeeTranslation: Equatable, Sendable {
 public struct ZigbeeStateTranslator: Sendable {
     public init() {}
 
+    /// Creates a canonical unknown-availability fact when Zigbee2MQTT
+    /// discovers a device before the sleeping device next reports state.
+    public func translateDiscovery(
+        installationID: DwellIdentifier,
+        deviceID: DwellIdentifier,
+        observedAt: Date = Date()
+    ) throws -> ZigbeeTranslation {
+        let timestamp = Self.timestamp(observedAt)
+        let envelope: [String: Any] = [
+            "schema": "io.dwell.availability/1.0",
+            "messageId": UUID().uuidString.lowercased(),
+            "source": [
+                "installationId": installationID.rawValue,
+                "integrationId": "zigbee-main",
+            ],
+            "observedAt": timestamp,
+            "publishedAt": timestamp,
+            "quality": ["status": "good"],
+            "body": [
+                "status": "unknown",
+                "reason": "Discovered by Zigbee2MQTT",
+            ],
+        ]
+        return ZigbeeTranslation(
+            topic: "dwell/v1/i/\(installationID.rawValue)/device/\(deviceID.rawValue)/availability",
+            payload: try JSONSerialization.data(withJSONObject: envelope)
+        )
+    }
+
     /// Translates temperature, on/off, and brightness fields.
     public func translate(
         _ payload: Data,
@@ -88,14 +117,7 @@ public struct ZigbeeStateTranslator: Sendable {
         body: [String: Any],
         observedAt: Date
     ) throws -> ZigbeeTranslation {
-        let timestamp = observedAt.formatted(
-            .iso8601
-                .year()
-                .month()
-                .day()
-                .time(includingFractionalSeconds: true)
-                .timeZone(separator: .omitted)
-        )
+        let timestamp = Self.timestamp(observedAt)
         let envelope: [String: Any] = [
             "schema": schema,
             "messageId": UUID().uuidString.lowercased(),
@@ -111,6 +133,17 @@ public struct ZigbeeStateTranslator: Sendable {
         return ZigbeeTranslation(
             topic: "dwell/v1/i/\(installationID.rawValue)/device/\(deviceID.rawValue)/component/main/state/\(capability)",
             payload: try JSONSerialization.data(withJSONObject: envelope)
+        )
+    }
+
+    private static func timestamp(_ date: Date) -> String {
+        date.formatted(
+            .iso8601
+                .year()
+                .month()
+                .day()
+                .time(includingFractionalSeconds: true)
+                .timeZone(separator: .omitted)
         )
     }
 }

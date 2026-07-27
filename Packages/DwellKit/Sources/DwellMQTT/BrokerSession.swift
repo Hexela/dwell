@@ -86,6 +86,7 @@ public actor BrokerSession {
 
         do {
             try await transport.connect()
+            let publications = await transport.incomingMessages()
             try await transport.subscribe(to: configuration.canonicalTopicFilter)
             try await transport.publish(
                 Self.statusPayload(online: true),
@@ -94,7 +95,6 @@ public actor BrokerSession {
             )
             updateStatus(state: .online, lastErrorCode: nil)
 
-            let publications = await transport.incomingMessages()
             for try await publication in publications {
                 guard publication.topic != configuration.statusTopic else {
                     continue

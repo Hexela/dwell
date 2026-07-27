@@ -48,6 +48,20 @@
                ReferencedContainer = "container:Dwell.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "615778460FEFE0711750AD7E"
+               BuildableName = "DwellZigbeeAdapter"
+               BlueprintName = "DwellZigbeeAdapter"
+               ReferencedContainer = "container:Dwell.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

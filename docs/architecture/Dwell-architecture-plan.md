@@ -1106,9 +1106,11 @@ Apple Home/Matter bridge, HomeKit controller, third-party binary plug-ins, iPhon
    **Implemented foundation:** ordered device-state registry, persisted-state
    restoration, versioned XPC snapshots, native device list, durable ordinary
    on/off command publication, and canonical Zigbee2MQTT translation for
-   temperature, on/off, and brightness. Discovery metadata, managed adapter
-   supervision, brightness controls, and acknowledgement presentation remain
-   before this milestone is complete.
+   temperature, on/off, and brightness. The bundled adapter now connects as a
+   separate broker client, consumes live Zigbee2MQTT discovery/state topics,
+   maps IEEE addresses to stable IDs, and forwards supported commands.
+   Discovery metadata, bounded crash restart, brightness controls, and
+   acknowledgement presentation remain before this milestone is complete.
 8. Create one durable automation with trace and command acknowledgement.
 9. Complete onboarding happy path and offline-device diagnostic.
 10. Run 72-hour then seven-day soak before beta.

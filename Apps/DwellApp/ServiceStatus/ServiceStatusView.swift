@@ -62,6 +62,7 @@ private extension ServiceComponent {
         case .metadataStore: "Metadata store"
         case .historyStore: "History store"
         case .scheduler: "Scheduler"
+        case .zigbeeAdapter: "Zigbee2MQTT adapter"
         }
     }
 }

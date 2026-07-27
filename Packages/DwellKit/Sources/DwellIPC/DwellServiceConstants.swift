@@ -10,5 +10,6 @@ public enum DwellServiceConstants {
     public static let machServiceName = "com.hexela.dwell.daemon"
 
     /// The LaunchDaemon property-list filename embedded in Dwell.app.
-    public static let launchDaemonPlistName = "com.hexela.dwell.daemon.plist"
+    public static let launchDaemonPlistName =
+        "com.hexela.dwell.daemon.v2.plist"
 }

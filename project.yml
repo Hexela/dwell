@@ -41,16 +41,19 @@ targets:
         product: DwellIPC
       - target: DwellDaemon
         embed: false
+      - target: DwellZigbeeAdapter
+        embed: false
     postBuildScripts:
       - name: Embed LaunchDaemon
         basedOnDependencyAnalysis: false
         script: |
           set -eu
-          daemon_directory="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LaunchServices"
+          daemon_directory="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Resources"
           plist_directory="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LaunchDaemons"
           /bin/mkdir -p "${daemon_directory}" "${plist_directory}"
           /usr/bin/ditto "${BUILT_PRODUCTS_DIR}/DwellDaemon" "${daemon_directory}/DwellDaemon"
-          /usr/bin/ditto "${SRCROOT}/Config/LaunchDaemons/com.hexela.dwell.daemon.plist" "${plist_directory}/com.hexela.dwell.daemon.plist"
+          /usr/bin/ditto "${BUILT_PRODUCTS_DIR}/DwellZigbeeAdapter" "${daemon_directory}/DwellZigbeeAdapter"
+          /usr/bin/ditto "${SRCROOT}/Config/LaunchDaemons/com.hexela.dwell.daemon.v2.plist" "${plist_directory}/com.hexela.dwell.daemon.v2.plist"
           local_broker_configuration="${SRCROOT}/Config/Local/development-broker.json"
           fallback_broker_configuration="${SRCROOT}/Config/development-broker.json"
           broker_configuration=""
@@ -60,9 +63,7 @@ targets:
             broker_configuration="${fallback_broker_configuration}"
           fi
           if [ -n "${broker_configuration}" ]; then
-            resources_directory="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Resources"
-            /bin/mkdir -p "${resources_directory}"
-            /usr/bin/ditto "${broker_configuration}" "${resources_directory}/development-broker.json"
+            /usr/bin/ditto "${broker_configuration}" "${daemon_directory}/development-broker.json"
             echo "Embedded MQTT broker configuration from ${broker_configuration}"
           else
             echo "No development MQTT broker configuration found"
@@ -71,8 +72,11 @@ targets:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_ENTITLEMENTS: Config/Entitlements/DwellApp.entitlements
+        CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+        ENABLE_HARDENED_RUNTIME: YES
         INFOPLIST_KEY_CFBundleDisplayName: Dwell
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.lifestyle
+        OTHER_CODE_SIGN_FLAGS: "--timestamp"
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell
         PRODUCT_NAME: Dwell
 
@@ -98,8 +102,39 @@ targets:
         product: DwellSchemas
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.daemon
+        CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+        CREATE_INFOPLIST_SECTION_IN_BINARY: YES
+        ENABLE_HARDENED_RUNTIME: YES
+        ENTITLEMENTS_ALLOWED: NO
+        ENTITLEMENTS_REQUIRED: NO
+        GENERATE_INFOPLIST_FILE: YES
+        OTHER_CODE_SIGN_FLAGS: "--timestamp --identifier com.hexela.dwell.daemon.v2"
+        PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.daemon.v2
         PRODUCT_NAME: DwellDaemon
+
+  DwellZigbeeAdapter:
+    type: tool
+    platform: macOS
+    sources:
+      - path: Services/DwellZigbeeAdapter
+    dependencies:
+      - package: DwellKit
+        product: DwellDomain
+      - package: DwellKit
+        product: DwellMQTT
+      - package: DwellKit
+        product: DwellMQTTNIO
+      - package: DwellKit
+        product: DwellZigbee
+    settings:
+      base:
+        CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+        ENABLE_HARDENED_RUNTIME: YES
+        ENTITLEMENTS_ALLOWED: NO
+        ENTITLEMENTS_REQUIRED: NO
+        OTHER_CODE_SIGN_FLAGS: "--timestamp --identifier com.hexela.dwell.adapter.zigbee2mqtt"
+        PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.adapter.zigbee2mqtt
+        PRODUCT_NAME: DwellZigbeeAdapter
 
   DwellCLI:
     type: tool
@@ -111,6 +146,11 @@ targets:
         product: DwellIPC
     settings:
       base:
+        CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+        ENABLE_HARDENED_RUNTIME: YES
+        ENTITLEMENTS_ALLOWED: NO
+        ENTITLEMENTS_REQUIRED: NO
+        OTHER_CODE_SIGN_FLAGS: "--timestamp --identifier com.hexela.dwell.cli"
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.cli
         PRODUCT_NAME: dwellctl
 
@@ -129,6 +169,7 @@ targets:
       - path: Services/DwellDaemon/DaemonRuntime.swift
       - path: Services/DwellDaemon/DwellXPCService.swift
       - path: Services/DwellDaemon/DeviceCommandDispatcher.swift
+      - path: Services/DwellDaemon/AdapterSupervisor.swift
     dependencies:
       - package: DwellKit
         product: DwellDomain
@@ -158,6 +199,7 @@ schemes:
         DwellApp: all
         DwellDaemon: all
         DwellCLI: all
+        DwellZigbeeAdapter: all
     run:
       config: Debug
       executable: DwellApp

@@ -4,6 +4,7 @@
 // License, v. 2.0.
 
 import DwellMQTT
+import Darwin
 import Foundation
 
 /// Loads ignored development broker configuration without logging secrets.
@@ -24,16 +25,35 @@ enum DevelopmentBrokerConfigurationLoader {
             urls.append(URL(filePath: configuredPath))
         }
 
-        var executableURL = URL(filePath: CommandLine.arguments[0])
-            .standardizedFileURL
-        executableURL.deleteLastPathComponent()
-        executableURL.deleteLastPathComponent()
-        executableURL.deleteLastPathComponent()
+        let executableDirectory = resolvedExecutableDirectory()
         urls.append(
-            executableURL.appending(
-                path: "Resources/development-broker.json"
+            executableDirectory.appending(
+                path: "development-broker.json"
             )
         )
         return urls
+    }
+
+    private static func resolvedExecutableDirectory() -> URL {
+        var size: UInt32 = 0
+        _ = _NSGetExecutablePath(nil, &size)
+        var buffer = [CChar](repeating: 0, count: Int(size))
+        let result = buffer.withUnsafeMutableBufferPointer {
+            _NSGetExecutablePath($0.baseAddress, &size)
+        }
+        guard result == 0 else {
+            return URL(filePath: CommandLine.arguments[0])
+                .standardizedFileURL
+                .deletingLastPathComponent()
+        }
+        let path = String(
+            decoding: buffer.prefix { $0 != 0 }.map {
+                UInt8(bitPattern: $0)
+            },
+            as: UTF8.self
+        )
+        return URL(filePath: path)
+            .resolvingSymlinksInPath()
+            .deletingLastPathComponent()
     }
 }

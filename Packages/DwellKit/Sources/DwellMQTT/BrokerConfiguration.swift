@@ -19,6 +19,7 @@ public struct BrokerConfiguration: Codable, Equatable, Sendable {
     public let usesTLS: Bool
     public let username: String?
     public let password: String?
+    public let statusTopicOverride: String?
 
     /// Creates a validated broker configuration.
     public init(
@@ -29,7 +30,8 @@ public struct BrokerConfiguration: Codable, Equatable, Sendable {
         protocolVersion: ProtocolVersion = .v5,
         usesTLS: Bool = true,
         username: String? = nil,
-        password: String? = nil
+        password: String? = nil,
+        statusTopicOverride: String? = nil
     ) {
         precondition(host.isEmpty == false)
         precondition((1...65_535).contains(port))
@@ -43,6 +45,7 @@ public struct BrokerConfiguration: Codable, Equatable, Sendable {
         self.usesTLS = usesTLS
         self.username = username
         self.password = password
+        self.statusTopicOverride = statusTopicOverride
     }
 
     /// The canonical topic filter owned by this installation.
@@ -52,6 +55,7 @@ public struct BrokerConfiguration: Codable, Equatable, Sendable {
 
     /// The retained daemon availability topic.
     public var statusTopic: String {
-        "dwell/v1/i/\(installationIdentifier)/system/status"
+        statusTopicOverride
+            ?? "dwell/v1/i/\(installationIdentifier)/system/status"
     }
 }

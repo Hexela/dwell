@@ -126,7 +126,7 @@ final class ServiceStatusModel {
             directoryHint: .isDirectory
         )
         let daemonURL = contentsURL
-            .appending(path: "Library/LaunchServices/DwellDaemon")
+            .appending(path: "Resources/DwellDaemon")
         let propertyListURL = contentsURL.appending(
             path: "Library/LaunchDaemons/\(DwellServiceConstants.launchDaemonPlistName)"
         )

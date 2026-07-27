@@ -11,6 +11,26 @@ import Testing
 
 @Suite("Zigbee2MQTT translation")
 struct ZigbeeStateTranslatorTests {
+    @Test("Discovery becomes retained canonical availability")
+    func discoveryBecomesAvailability() throws {
+        let translation = try ZigbeeStateTranslator().translateDiscovery(
+            installationID: DwellIdentifier(rawValue: "home-a")!,
+            deviceID: DwellIdentifier(rawValue: "zb-00124b00251c7e9d")!
+        )
+
+        #expect(
+            translation.topic
+                == "dwell/v1/i/home-a/device/zb-00124b00251c7e9d/availability"
+        )
+        let body = try JSONSerialization.jsonObject(with: translation.payload)
+            as? [String: Any]
+        #expect(body?["schema"] as? String == "io.dwell.availability/1.0")
+        #expect(
+            (body?["body"] as? [String: Any])?["status"] as? String
+                == "unknown"
+        )
+    }
+
     @Test("Temperature and dimmable light state become canonical publications")
     func translatesUsefulDeviceState() throws {
         let installation = try #require(DwellIdentifier(rawValue: "home-a"))

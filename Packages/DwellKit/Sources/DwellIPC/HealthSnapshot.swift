@@ -21,6 +21,7 @@ public enum ServiceComponent: String, CaseIterable, Codable, Sendable {
     case metadataStore = "metadata-store"
     case historyStore = "history-store"
     case scheduler
+    case zigbeeAdapter = "zigbee-adapter"
 }
 
 /// The operational state of a daemon component.

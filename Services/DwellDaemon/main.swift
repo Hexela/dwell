@@ -25,6 +25,7 @@ let serviceVersion =
 let runtime = DaemonRuntime(serviceVersion: serviceVersion)
 let registry = DeviceRegistry()
 let commandDispatcher = DeviceCommandDispatcher()
+let adapterSupervisor = AdapterSupervisor(runtime: runtime)
 let service = DwellXPCService(
     runtime: runtime,
     registry: registry,
@@ -78,6 +79,7 @@ Task {
         }
 
         if let brokerConfiguration {
+            adapterSupervisor.startIfAvailable()
             let pipeline = CanonicalMessagePipeline(
                 durableIngester: storage.history
             )
