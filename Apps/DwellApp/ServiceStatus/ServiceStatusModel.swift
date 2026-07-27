@@ -90,9 +90,27 @@ final class ServiceStatusModel {
         case .requiresApproval:
             .requiresApproval
         case .notFound:
-            .notFound
+            bundledServiceIsPresent ? .notRegistered : .notFound
         @unknown default:
             .notFound
         }
+    }
+
+    /// Service Management also reports `.notFound` when no registration
+    /// record exists yet, so inspect the app bundle before calling it a
+    /// packaging failure.
+    private var bundledServiceIsPresent: Bool {
+        let contentsURL = Bundle.main.bundleURL.appending(
+            path: "Contents",
+            directoryHint: .isDirectory
+        )
+        let daemonURL = contentsURL
+            .appending(path: "Library/LaunchServices/DwellDaemon")
+        let propertyListURL = contentsURL.appending(
+            path: "Library/LaunchDaemons/\(DwellServiceConstants.launchDaemonPlistName)"
+        )
+
+        return FileManager.default.isExecutableFile(atPath: daemonURL.path())
+            && FileManager.default.fileExists(atPath: propertyListURL.path())
     }
 }
