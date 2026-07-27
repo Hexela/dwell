@@ -76,6 +76,21 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.cli
         PRODUCT_NAME: dwellctl
 
+  DwellProtocolTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Packages/DwellKit/Tests/DwellSchemasTests
+    dependencies:
+      - package: DwellKit
+        product: DwellDomain
+      - package: DwellKit
+        product: DwellSchemas
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hexela.dwell.tests.protocol
+        PRODUCT_NAME: DwellProtocolTests
+
 schemes:
   Dwell:
     build:
@@ -86,6 +101,10 @@ schemes:
     run:
       config: Debug
       executable: DwellApp
+    test:
+      config: Debug
+      targets:
+        - DwellProtocolTests
     archive:
       config: Release
 
@@ -95,6 +114,10 @@ schemes:
         DwellApp: all
     run:
       config: Debug
+    test:
+      config: Debug
+      targets:
+        - DwellProtocolTests
     archive:
       config: Release
 
@@ -111,4 +134,3 @@ schemes:
         DwellCLI: all
     run:
       config: Debug
-

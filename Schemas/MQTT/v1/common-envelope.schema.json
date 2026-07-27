@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.dwell.io/mqtt/v1/common-envelope.schema.json",
+  "title": "Dwell canonical message envelope",
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z$"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "installationId",
+        "integrationId"
+      ],
+      "properties": {
+        "installationId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "integrationId": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "additionalProperties": true
+    },
+    "quality": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "good",
+            "uncertain",
+            "stale",
+            "invalid",
+            "unavailable"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "envelope": {
+      "type": "object",
+      "required": [
+        "schema",
+        "messageId",
+        "source",
+        "publishedAt",
+        "quality",
+        "body"
+      ],
+      "properties": {
+        "schema": {
+          "type": "string"
+        },
+        "messageId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "observedAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "publishedAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "quality": {
+          "$ref": "#/$defs/quality"
+        },
+        "correlationId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "causationId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "body": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

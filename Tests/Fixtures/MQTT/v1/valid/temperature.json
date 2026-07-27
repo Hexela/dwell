@@ -1,0 +1,22 @@
+{
+  "schema": "io.dwell.state.quantity/1.0",
+  "messageId": "temp-001",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "zigbee-main"
+  },
+  "observedAt": "2026-07-26T20:14:32.481Z",
+  "publishedAt": "2026-07-26T20:14:32.612Z",
+  "sequence": 1842,
+  "quality": {
+    "status": "good",
+    "confidence": 0.99,
+    "producerNote": "calibrated"
+  },
+  "body": {
+    "value": 21.4,
+    "unit": "cel",
+    "sensorPrecision": 0.1
+  },
+  "futureEnvelopeField": true
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.dwell.io/mqtt/v1/command.schema.json",
+  "title": "Dwell command",
+  "allOf": [
+    {
+      "$ref": "common-envelope.schema.json#/$defs/envelope"
+    },
+    {
+      "properties": {
+        "schema": {
+          "pattern": "^io\\.dwell\\.command/1\\.\\d+$"
+        },
+        "body": {
+          "type": "object",
+          "required": [
+            "commandId",
+            "operation",
+            "value",
+            "expiresAt",
+            "origin",
+            "risk"
+          ],
+          "properties": {
+            "commandId": {
+              "$ref": "common-envelope.schema.json#/$defs/identifier"
+            },
+            "operation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "expiresAt": {
+              "$ref": "common-envelope.schema.json#/$defs/timestamp"
+            },
+            "expected": {
+              "type": "object",
+              "required": [
+                "revision"
+              ],
+              "properties": {
+                "revision": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": true
+            },
+            "origin": {
+              "type": "object",
+              "required": [
+                "kind"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "automation",
+                    "scene",
+                    "user",
+                    "interface",
+                    "federation",
+                    "system"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "installationId": {
+                  "$ref": "common-envelope.schema.json#/$defs/identifier"
+                }
+              },
+              "additionalProperties": true
+            },
+            "risk": {
+              "enum": [
+                "ordinary",
+                "privacy-sensitive",
+                "security-sensitive",
+                "safety-critical"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    }
+  ]
+}

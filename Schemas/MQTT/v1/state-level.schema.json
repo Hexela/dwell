@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.dwell.io/mqtt/v1/state-level.schema.json",
+  "title": "Dwell level state",
+  "allOf": [
+    {
+      "$ref": "common-envelope.schema.json#/$defs/envelope"
+    },
+    {
+      "properties": {
+        "schema": {
+          "pattern": "^io\\.dwell\\.state\\.level/1\\.\\d+$"
+        },
+        "body": {
+          "type": "object",
+          "required": [
+            "value",
+            "range"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "range": {
+              "type": "object",
+              "required": [
+                "minimum",
+                "maximum"
+              ],
+              "properties": {
+                "minimum": {
+                  "type": "number"
+                },
+                "maximum": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "io.dwell.state.enum/1.0",
+  "messageId": "lock-001",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "zigbee-main"
+  },
+  "observedAt": "2026-07-26T20:14:35.000Z",
+  "publishedAt": "2026-07-26T20:14:35.020Z",
+  "quality": {
+    "status": "good",
+    "confidence": 1
+  },
+  "body": {
+    "value": "secured",
+    "allowed": [
+      "secured",
+      "unsecured",
+      "jammed",
+      "unknown"
+    ]
+  }
+}

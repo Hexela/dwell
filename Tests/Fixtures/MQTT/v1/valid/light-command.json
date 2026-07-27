@@ -1,0 +1,27 @@
+{
+  "schema": "io.dwell.command/1.0",
+  "messageId": "cmd-001",
+  "correlationId": "run-001",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "dwell-core"
+  },
+  "publishedAt": "2026-07-26T20:15:00.000Z",
+  "quality": {
+    "status": "good"
+  },
+  "body": {
+    "commandId": "cmd-001",
+    "operation": "set",
+    "value": 0.35,
+    "expiresAt": "2026-07-26T20:15:10.000Z",
+    "expected": {
+      "revision": 418
+    },
+    "origin": {
+      "kind": "automation",
+      "id": "evening-light"
+    },
+    "risk": "ordinary"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "io.dwell.command/1.0",
+  "messageId": "cmd-expired",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "dwell-core"
+  },
+  "publishedAt": "2026-07-26T20:14:00.000Z",
+  "quality": {
+    "status": "good"
+  },
+  "body": {
+    "commandId": "cmd-expired",
+    "operation": "set",
+    "value": true,
+    "expiresAt": "2026-07-26T20:14:10.000Z",
+    "origin": {
+      "kind": "user"
+    },
+    "risk": "ordinary"
+  }
+}

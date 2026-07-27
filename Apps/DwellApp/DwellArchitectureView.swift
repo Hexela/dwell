@@ -17,7 +17,10 @@ struct DwellArchitectureView: View {
             }
 
             Section("Current status") {
-                Label("Canonical MQTT topic contract is available", systemImage: "checkmark.circle.fill")
+                Label(
+                    "Canonical MQTT schemas and typed decoding are available",
+                    systemImage: "checkmark.circle.fill"
+                )
                     .foregroundStyle(.green)
                 Label("Daemon and client communication is not yet connected", systemImage: "circle.dotted")
             }

@@ -44,4 +44,29 @@ public struct DwellIdentifier: Hashable, Sendable, Codable, RawRepresentable {
             false
         }
     }
+
+    /// Decodes a validated identifier from a single string value.
+    ///
+    /// - Parameter decoder: The decoder containing the protocol value.
+    /// - Throws: `DecodingError.dataCorrupted` for malformed identifiers.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let identifier = Self(rawValue: rawValue) else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Invalid Dwell identifier."
+            )
+        }
+
+        self = identifier
+    }
+
+    /// Encodes the identifier as a single string value.
+    ///
+    /// - Parameter encoder: The encoder receiving the protocol value.
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
 }

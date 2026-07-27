@@ -1,0 +1,18 @@
+{
+  "schema": "io.dwell.availability/1.0",
+  "messageId": "availability-001",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "zigbee-main"
+  },
+  "observedAt": "2026-07-26T19:00:00.000Z",
+  "publishedAt": "2026-07-26T20:14:36.000Z",
+  "quality": {
+    "status": "good"
+  },
+  "body": {
+    "status": "online",
+    "since": "2026-07-26T19:00:00.000Z",
+    "reason": null
+  }
+}

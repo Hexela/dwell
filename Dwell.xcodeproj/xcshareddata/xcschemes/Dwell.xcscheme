@@ -65,6 +65,17 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AE0DAB3160CDCE0C90FA9168"
+               BuildableName = "DwellProtocolTests.xctest"
+               BlueprintName = "DwellProtocolTests"
+               ReferencedContainer = "container:Dwell.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

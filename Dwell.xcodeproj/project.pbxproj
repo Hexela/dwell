@@ -12,24 +12,37 @@
 		1AE8057836246EAD4367A930 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88A236162E8069FD23D420C /* main.swift */; };
 		4FA009EE954AC80548DAD03E /* DwellRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D68CADF9DF586D8FAF959CC /* DwellRootView.swift */; };
 		69A05D3D2BFFEB696BAFFA12 /* DwellSchemas in Frameworks */ = {isa = PBXBuildFile; productRef = 37930AE9877FBDB3D77C5425 /* DwellSchemas */; };
+		6F644EE988573A5BDF8B13B2 /* CanonicalMessageDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49574810C72351EF840F958 /* CanonicalMessageDecoderTests.swift */; };
 		9929EB7165D3B4CB380BC724 /* DwellSchemas in Frameworks */ = {isa = PBXBuildFile; productRef = E9B75F95C1135B479B6AB1F9 /* DwellSchemas */; };
 		9B45C27A1E0455C89917CD48 /* DwellSchemas in Frameworks */ = {isa = PBXBuildFile; productRef = CA2FF970A4EA588B1942CC07 /* DwellSchemas */; };
 		9C56483AAABA1BBBD56A2D7E /* DwellDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 223FCE598E534C4B6E65B982 /* DwellDomain */; };
+		A3A0834C34DE4D4CF725CFEE /* DwellSchemas in Frameworks */ = {isa = PBXBuildFile; productRef = 8F351E6AA59B893F8926347F /* DwellSchemas */; };
+		AA036ECF5E6410EA4D11564A /* CanonicalTopicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EF58ACF7066114441182BB /* CanonicalTopicTests.swift */; };
+		B8488B5CF316CC5586E634A8 /* FixtureSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF28A6A0F38287635825EC6 /* FixtureSupport.swift */; };
+		BA51FD4D5D0A4DE87206C807 /* DwellDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 9AF376D78975E67EA08EDA65 /* DwellDomain */; };
 		C26F9214815B58F966BFEDDB /* DwellDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 78FF143A686A79CA00CB77B0 /* DwellDomain */; };
 		C3E219F1B992EF44B51E5EA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F422BC3BB7901840E7AC467 /* Assets.xcassets */; };
+		CEDFB3167342C7F5DAA348C9 /* CanonicalSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAB1B0EF7F40F4416E403A9 /* CanonicalSchemaTests.swift */; };
 		E876A5C0BA71388A67BD9D7D /* DwellApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB42DB086B9F5CCFE040860 /* DwellApp.swift */; };
 		F2471C1F5B4731D569659877 /* DwellArchitectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FACA3A018C27E5896064CE /* DwellArchitectureView.swift */; };
+		FE677E3CA4308ED6D7075FF8 /* JSONSchemaTestValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05A771A0E65850DA7AD43DA /* JSONSchemaTestValidator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0D68CADF9DF586D8FAF959CC /* DwellRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwellRootView.swift; sourceTree = "<group>"; };
 		0EB4A828EE3610636AC392F2 /* DwellCLI */ = {isa = PBXFileReference; includeInIndex = 0; path = DwellCLI; sourceTree = BUILT_PRODUCTS_DIR; };
+		19910903E6E50DB90417BA18 /* DwellProtocolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DwellProtocolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F422BC3BB7901840E7AC467 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7AF28A6A0F38287635825EC6 /* FixtureSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureSupport.swift; sourceTree = "<group>"; };
+		8DAB1B0EF7F40F4416E403A9 /* CanonicalSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalSchemaTests.swift; sourceTree = "<group>"; };
 		A75C3664DEC0D9C1267EF45B /* DwellApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DwellApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A88A236162E8069FD23D420C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		C05A771A0E65850DA7AD43DA /* JSONSchemaTestValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaTestValidator.swift; sourceTree = "<group>"; };
 		C19CDB96D0F1026201786F58 /* DwellDaemon */ = {isa = PBXFileReference; includeInIndex = 0; path = DwellDaemon; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9EF58ACF7066114441182BB /* CanonicalTopicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalTopicTests.swift; sourceTree = "<group>"; };
 		D407CD9C06D372820781A80C /* DwellKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DwellKit; path = Packages/DwellKit; sourceTree = SOURCE_ROOT; };
 		D51BC0F6EB5D0D17185E2839 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E49574810C72351EF840F958 /* CanonicalMessageDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalMessageDecoderTests.swift; sourceTree = "<group>"; };
 		F9FACA3A018C27E5896064CE /* DwellArchitectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwellArchitectureView.swift; sourceTree = "<group>"; };
 		FFB42DB086B9F5CCFE040860 /* DwellApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwellApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,6 +54,15 @@
 			files = (
 				C26F9214815B58F966BFEDDB /* DwellDomain in Frameworks */,
 				9B45C27A1E0455C89917CD48 /* DwellSchemas in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61F951B1B745DEDF0B5F9464 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA51FD4D5D0A4DE87206C807 /* DwellDomain in Frameworks */,
+				A3A0834C34DE4D4CF725CFEE /* DwellSchemas in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +108,19 @@
 			path = Apps/DwellApp;
 			sourceTree = "<group>";
 		};
+		734800B8FA7AFC72DE5C2F60 /* DwellSchemasTests */ = {
+			isa = PBXGroup;
+			children = (
+				E49574810C72351EF840F958 /* CanonicalMessageDecoderTests.swift */,
+				8DAB1B0EF7F40F4416E403A9 /* CanonicalSchemaTests.swift */,
+				C9EF58ACF7066114441182BB /* CanonicalTopicTests.swift */,
+				7AF28A6A0F38287635825EC6 /* FixtureSupport.swift */,
+				C05A771A0E65850DA7AD43DA /* JSONSchemaTestValidator.swift */,
+			);
+			name = DwellSchemasTests;
+			path = Packages/DwellKit/Tests/DwellSchemasTests;
+			sourceTree = "<group>";
+		};
 		A1E9592B59B00F9A2969882A /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +144,7 @@
 				A75C3664DEC0D9C1267EF45B /* DwellApp.app */,
 				0EB4A828EE3610636AC392F2 /* DwellCLI */,
 				C19CDB96D0F1026201786F58 /* DwellDaemon */,
+				19910903E6E50DB90417BA18 /* DwellProtocolTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,6 +155,7 @@
 				17ECA4A829285762756ED41E /* DwellApp */,
 				B774D6C8BAD2854FE682AD82 /* DwellCLI */,
 				091AE4176259B54E30E4496E /* DwellDaemon */,
+				734800B8FA7AFC72DE5C2F60 /* DwellSchemasTests */,
 				A1E9592B59B00F9A2969882A /* Packages */,
 				BC6B3FBA3B4713AAF14C8D9F /* Products */,
 			);
@@ -188,6 +225,26 @@
 			productReference = 0EB4A828EE3610636AC392F2 /* DwellCLI */;
 			productType = "com.apple.product-type.tool";
 		};
+		AE0DAB3160CDCE0C90FA9168 /* DwellProtocolTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 98CB41AF820C42E8CC5E8675 /* Build configuration list for PBXNativeTarget "DwellProtocolTests" */;
+			buildPhases = (
+				785E07111810095E7B5775DA /* Sources */,
+				61F951B1B745DEDF0B5F9464 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DwellProtocolTests;
+			packageProductDependencies = (
+				9AF376D78975E67EA08EDA65 /* DwellDomain */,
+				8F351E6AA59B893F8926347F /* DwellSchemas */,
+			);
+			productName = DwellProtocolTests;
+			productReference = 19910903E6E50DB90417BA18 /* DwellProtocolTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -206,6 +263,10 @@
 						ProvisioningStyle = Automatic;
 					};
 					86A0AD04F6576A6D4A78C1B5 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					AE0DAB3160CDCE0C90FA9168 = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
@@ -231,6 +292,7 @@
 				1250D47E0C62B47482B73D5D /* DwellApp */,
 				0A8868B46C17DEF3363CA67F /* DwellDaemon */,
 				86A0AD04F6576A6D4A78C1B5 /* DwellCLI */,
+				AE0DAB3160CDCE0C90FA9168 /* DwellProtocolTests */,
 			);
 		};
 /* End PBXProject section */
@@ -262,6 +324,18 @@
 				E876A5C0BA71388A67BD9D7D /* DwellApp.swift in Sources */,
 				F2471C1F5B4731D569659877 /* DwellArchitectureView.swift in Sources */,
 				4FA009EE954AC80548DAD03E /* DwellRootView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		785E07111810095E7B5775DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F644EE988573A5BDF8B13B2 /* CanonicalMessageDecoderTests.swift in Sources */,
+				CEDFB3167342C7F5DAA348C9 /* CanonicalSchemaTests.swift in Sources */,
+				AA036ECF5E6410EA4D11564A /* CanonicalTopicTests.swift in Sources */,
+				B8488B5CF316CC5586E634A8 /* FixtureSupport.swift in Sources */,
+				FE677E3CA4308ED6D7075FF8 /* JSONSchemaTestValidator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +543,22 @@
 			};
 			name = Debug;
 		};
+		E445C407422EAF2A9663F2F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hexela.dwell.tests.protocol;
+				PRODUCT_NAME = DwellProtocolTests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
 		EBC5EA4E908B7E230FA0C181 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -479,6 +569,22 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hexela.dwell.cli;
 				PRODUCT_NAME = dwellctl;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		F59912EF9011641C0C7CD133 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hexela.dwell.tests.protocol;
+				PRODUCT_NAME = DwellProtocolTests;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -540,6 +646,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		98CB41AF820C42E8CC5E8675 /* Build configuration list for PBXNativeTarget "DwellProtocolTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E445C407422EAF2A9663F2F7 /* Debug */,
+				F59912EF9011641C0C7CD133 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -559,6 +674,14 @@
 			productName = DwellSchemas;
 		};
 		78FF143A686A79CA00CB77B0 /* DwellDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DwellDomain;
+		};
+		8F351E6AA59B893F8926347F /* DwellSchemas */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DwellSchemas;
+		};
+		9AF376D78975E67EA08EDA65 /* DwellDomain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DwellDomain;
 		};

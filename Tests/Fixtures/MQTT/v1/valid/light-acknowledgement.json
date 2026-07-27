@@ -1,0 +1,22 @@
+{
+  "schema": "io.dwell.command-ack/1.0",
+  "messageId": "ack-001",
+  "correlationId": "run-001",
+  "causationId": "cmd-001",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "zigbee-main"
+  },
+  "publishedAt": "2026-07-26T20:15:01.000Z",
+  "quality": {
+    "status": "good"
+  },
+  "body": {
+    "commandId": "cmd-001",
+    "status": "applied",
+    "resultingState": {
+      "value": 0.35
+    },
+    "error": null
+  }
+}

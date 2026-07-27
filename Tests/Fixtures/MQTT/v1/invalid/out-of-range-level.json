@@ -1,0 +1,19 @@
+{
+  "schema": "io.dwell.state.level/1.0",
+  "messageId": "level-002",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "zigbee-main"
+  },
+  "publishedAt": "2026-07-26T20:14:34.025Z",
+  "quality": {
+    "status": "good"
+  },
+  "body": {
+    "value": 1.5,
+    "range": {
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}
