@@ -36,14 +36,16 @@ Open [`Dwell.xcworkspace`](Dwell.xcworkspace) in Xcode. The shared `Dwell`
 scheme builds the management app, daemon foundation, and `dwellctl` command-line
 tool together. Individual schemes are also available for each executable.
 
-The checked-in Xcode project is generated from [`project.yml`](project.yml)
-using [XcodeGen](https://github.com/yonaskolb/XcodeGen). After changing targets,
-source groups, package dependencies, or build settings, regenerate it from the
-repository root:
+Running a privileged development daemon requires the app and embedded daemon
+to be signed by an Apple Development team. A “Sign to Run Locally” ad-hoc
+build can run the management app, but macOS will reject its registered
+LaunchDaemon. Signing and build settings are maintained directly in the
+checked-in Xcode project. The app detects an ad-hoc build and avoids
+unregistering a working signed service.
 
-```sh
-xcodegen generate --spec project.yml
-```
+`Dwell.xcodeproj` is authoritative. Add targets, files, dependencies, signing,
+and build settings directly in Xcode; do not regenerate or replace the project
+from an external project specification.
 
 ### Development MQTT broker
 
@@ -74,15 +76,17 @@ directly.
 
 Dwell is pre-alpha. Canonical contracts, background-service health, MQTT
 lifecycle, and the first persistence/reconciliation foundation are implemented.
-The first useful-device slice now restores canonical sensor/light state into an
-actor-owned registry, exposes device snapshots through signed XPC, and presents
-them in a native Devices screen. Ordinary on/off light requests are persisted
-before non-retained MQTT publication. A Zigbee2MQTT translator has canonical
-conformance coverage for temperature, on/off, and brightness payloads; managed
-adapter execution now subscribes to live Zigbee2MQTT topics, maps IEEE
-addresses to stable Dwell IDs, republishes retained canonical state, and
-forwards supported light commands. Discovery metadata, bounded crash restart,
-and command acknowledgement presentation remain follow-up work.
+The first useful-device slice now restores canonical sensor/light state and
+retained discovery metadata into an actor-owned registry, exposes device and
+durable command-lifecycle snapshots through signed XPC, and generates native
+controls from canonical capability metadata. Zigbee2MQTT devices retain stable
+IEEE-derived Dwell IDs across friendly-name changes. The supervised adapter
+publishes canonical temperature, on/off, brightness, metadata, availability,
+and command acknowledgements, while bounded crash restart prevents an adapter
+crash loop. On/off and brightness requests are persisted before publication;
+the Devices screen presents pending, applied, failed, and timed-out outcomes
+without treating desired state as reported state. Guided onboarding, rooms,
+generic topic mapping, and the MQTT Inspector remain Phase 2 follow-up work.
 
 ## Contributing
 

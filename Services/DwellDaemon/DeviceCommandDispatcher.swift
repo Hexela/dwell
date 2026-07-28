@@ -75,6 +75,15 @@ actor DeviceCommandDispatcher {
         )
     }
 
+    func commandSnapshots(
+        now: Date = Date()
+    ) async throws -> [DeviceCommandSnapshot] {
+        guard let history else {
+            return []
+        }
+        return try await history.commandSnapshots(now: now)
+    }
+
     private static func payload(
         request: DeviceCommandRequest,
         installationID: DwellIdentifier,

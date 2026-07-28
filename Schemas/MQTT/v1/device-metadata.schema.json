@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.dwell.io/mqtt/v1/device-metadata.schema.json",
+  "title": "Dwell device component metadata",
+  "allOf": [
+    { "$ref": "common-envelope.schema.json#/$defs/envelope" },
+    {
+      "type": "object",
+      "properties": {
+        "schema": { "type": "string", "pattern": "^io\\.dwell\\.device-metadata/1\\.[0-9]+$" },
+        "body": {
+          "type": "object",
+          "required": ["deviceName", "componentName", "capabilities"],
+          "properties": {
+            "deviceName": { "type": "string", "minLength": 1 },
+            "componentName": { "type": "string", "minLength": 1 },
+            "manufacturer": { "type": "string", "minLength": 1 },
+            "model": { "type": "string", "minLength": 1 },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["capability", "displayName", "valueKind", "isWritable"],
+                "properties": {
+                  "capability": { "type": "string", "pattern": "^[a-z0-9-]+(?:\\.[a-z0-9-]+)*$" },
+                  "displayName": { "type": "string", "minLength": 1 },
+                  "valueKind": { "enum": ["boolean", "level", "quantity", "text"] },
+                  "isWritable": { "type": "boolean" },
+                  "unit": { "type": "string" },
+                  "minimum": { "type": "number" },
+                  "maximum": { "type": "number" }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

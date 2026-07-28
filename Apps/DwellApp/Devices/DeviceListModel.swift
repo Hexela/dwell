@@ -29,15 +29,33 @@ final class DeviceListModel {
         do {
             devices = try await client.deviceSnapshot().devices
             errorMessage = nil
+        } catch ServiceRequestError.malformedResponse {
+            errorMessage = """
+                The registered daemon returned an older device format. \
+                Update the service from Home.
+                """
         } catch {
             errorMessage = "Dwell could not load devices from the daemon."
         }
     }
 
-    func toggle(
+    func monitor() async {
+        while !Task.isCancelled {
+            await refresh()
+            do {
+                try await Task.sleep(for: .seconds(2))
+            } catch is CancellationError {
+                return
+            } catch {
+                return
+            }
+        }
+    }
+
+    func setValue(
         device: DeviceSnapshot,
         capability: CapabilitySnapshot,
-        to value: Bool
+        to value: CapabilitySnapshot.Value
     ) async {
         do {
             _ = try await client.perform(
@@ -45,11 +63,12 @@ final class DeviceListModel {
                     deviceID: device.deviceID,
                     componentID: capability.componentID,
                     capability: capability.capability,
-                    value: .boolean(value),
+                    value: value,
                     idempotencyKey: UUID()
                 )
             )
             errorMessage = nil
+            await refresh()
         } catch {
             errorMessage = "The light command could not be published."
         }

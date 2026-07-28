@@ -17,9 +17,121 @@ public struct ZigbeeTranslation: Equatable, Sendable {
     }
 }
 
+/// Discovery information used to publish canonical component metadata.
+public struct ZigbeeDeviceMetadata: Equatable, Sendable {
+    public let deviceName: String
+    public let manufacturer: String?
+    public let model: String?
+    public let exposesTemperature: Bool
+    public let exposesLightOn: Bool
+    public let exposesLightLevel: Bool
+
+    public init(
+        deviceName: String,
+        manufacturer: String? = nil,
+        model: String? = nil,
+        exposesTemperature: Bool = false,
+        exposesLightOn: Bool = false,
+        exposesLightLevel: Bool = false
+    ) {
+        self.deviceName = deviceName
+        self.manufacturer = manufacturer
+        self.model = model
+        self.exposesTemperature = exposesTemperature
+        self.exposesLightOn = exposesLightOn
+        self.exposesLightLevel = exposesLightLevel
+    }
+}
+
 /// Converts the first supported Zigbee2MQTT state capabilities to canonical MQTT.
 public struct ZigbeeStateTranslator: Sendable {
     public init() {}
+
+    public func translateMetadata(
+        _ metadata: ZigbeeDeviceMetadata,
+        installationID: DwellIdentifier,
+        deviceID: DwellIdentifier,
+        observedAt: Date = Date()
+    ) throws -> ZigbeeTranslation {
+        var capabilities: [[String: Any]] = []
+        if metadata.exposesTemperature {
+            capabilities.append([
+                "capability": "sensor.temperature",
+                "displayName": "Temperature",
+                "valueKind": "quantity",
+                "isWritable": false,
+                "unit": "cel",
+            ])
+        }
+        if metadata.exposesLightOn {
+            capabilities.append([
+                "capability": "light.on",
+                "displayName": "Power",
+                "valueKind": "boolean",
+                "isWritable": true,
+            ])
+        }
+        if metadata.exposesLightLevel {
+            capabilities.append([
+                "capability": "light.level",
+                "displayName": "Brightness",
+                "valueKind": "level",
+                "isWritable": true,
+                "minimum": 0,
+                "maximum": 1,
+            ])
+        }
+        var body: [String: Any] = [
+            "deviceName": metadata.deviceName,
+            "componentName": "Main",
+            "capabilities": capabilities,
+        ]
+        if let manufacturer = metadata.manufacturer {
+            body["manufacturer"] = manufacturer
+        }
+        if let model = metadata.model {
+            body["model"] = model
+        }
+        return try makeEnvelope(
+            installationID: installationID,
+            deviceID: deviceID,
+            route: "metadata",
+            schema: "io.dwell.device-metadata/1.0",
+            body: body,
+            observedAt: observedAt
+        )
+    }
+
+    public func translateAcknowledgement(
+        commandID: String,
+        capability: String,
+        status: String,
+        installationID: DwellIdentifier,
+        deviceID: DwellIdentifier,
+        observedAt: Date = Date()
+    ) throws -> ZigbeeTranslation {
+        let timestamp = Self.timestamp(observedAt)
+        let envelope: [String: Any] = [
+            "schema": "io.dwell.command-ack/1.0",
+            "messageId": UUID().uuidString.lowercased(),
+            "source": [
+                "installationId": installationID.rawValue,
+                "integrationId": "zigbee-main",
+            ],
+            "observedAt": timestamp,
+            "publishedAt": timestamp,
+            "quality": ["status": "good"],
+            "causationId": commandID,
+            "body": [
+                "commandId": commandID,
+                "status": status,
+            ],
+        ]
+        return ZigbeeTranslation(
+            topic: "dwell/v1/i/\(installationID.rawValue)/device/\(deviceID.rawValue)/component/main/ack/\(capability)",
+            payload: try JSONSerialization.data(withJSONObject: envelope)
+        )
+    }
 
     /// Creates a canonical unknown-availability fact when Zigbee2MQTT
     /// discovers a device before the sleeping device next reports state.
@@ -132,6 +244,33 @@ public struct ZigbeeStateTranslator: Sendable {
         ]
         return ZigbeeTranslation(
             topic: "dwell/v1/i/\(installationID.rawValue)/device/\(deviceID.rawValue)/component/main/state/\(capability)",
+            payload: try JSONSerialization.data(withJSONObject: envelope)
+        )
+    }
+
+    private func makeEnvelope(
+        installationID: DwellIdentifier,
+        deviceID: DwellIdentifier,
+        route: String,
+        schema: String,
+        body: [String: Any],
+        observedAt: Date
+    ) throws -> ZigbeeTranslation {
+        let timestamp = Self.timestamp(observedAt)
+        let envelope: [String: Any] = [
+            "schema": schema,
+            "messageId": UUID().uuidString.lowercased(),
+            "source": [
+                "installationId": installationID.rawValue,
+                "integrationId": "zigbee-main",
+            ],
+            "observedAt": timestamp,
+            "publishedAt": timestamp,
+            "quality": ["status": "good"],
+            "body": body,
+        ]
+        return ZigbeeTranslation(
+            topic: "dwell/v1/i/\(installationID.rawValue)/device/\(deviceID.rawValue)/component/main/\(route)",
             payload: try JSONSerialization.data(withJSONObject: envelope)
         )
     }

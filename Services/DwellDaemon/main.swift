@@ -14,14 +14,18 @@ import DwellRegistry
 import DwellSchemas
 import Foundation
 import OSLog
+import Darwin
 
 let logger = Logger(
     subsystem: DwellServiceConstants.machServiceName,
     category: "Lifecycle"
 )
-let serviceVersion =
+let serviceVersion = [
     Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
-        as? String ?? "0.1.0"
+        as? String ?? "0.1.0",
+    Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion")
+        as? String ?? "1",
+].joined(separator: " (") + ")"
 let runtime = DaemonRuntime(serviceVersion: serviceVersion)
 let registry = DeviceRegistry()
 let commandDispatcher = DeviceCommandDispatcher()
@@ -51,6 +55,18 @@ let listener = NSXPCListener(
 )
 listener.delegate = delegate
 listener.activate()
+
+signal(SIGTERM, SIG_IGN)
+let terminationSource = DispatchSource.makeSignalSource(
+    signal: SIGTERM,
+    queue: .main
+)
+terminationSource.setEventHandler {
+    runtime.markStopping()
+    adapterSupervisor.stop()
+    exit(EXIT_SUCCESS)
+}
+terminationSource.resume()
 
 Task {
     do {

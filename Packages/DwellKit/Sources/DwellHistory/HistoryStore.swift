@@ -3,6 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0.
 
+import DwellDomain
 import DwellMQTT
 import DwellSchemas
 import Foundation
@@ -97,6 +98,13 @@ public final class HistoryStore: CanonicalMessageIngesting, Sendable {
                 )
             }
 
+            try Self.projectCommandLifecycle(
+                message,
+                publication: publication,
+                receivedAt: receivedAt,
+                database: database
+            )
+
             try database.execute(
                 sql: """
                     UPDATE store_metadata
@@ -144,16 +152,64 @@ public final class HistoryStore: CanonicalMessageIngesting, Sendable {
                 sql: "SELECT latest_commit_at FROM store_metadata WHERE singleton = 1"
             )
             return HistoryStoreStatus(
-                schemaVersion: 1,
+                schemaVersion: 2,
                 messageCount: messageCount,
                 latestCommitAt: latestCommitAt
             )
         }
     }
 
+    /// Returns current command lifecycle records, deriving timeouts durably.
+    public func commandSnapshots(
+        now: Date = Date()
+    ) async throws -> [DeviceCommandSnapshot] {
+        try await database.write { database in
+            try database.execute(
+                sql: """
+                    UPDATE device_commands
+                    SET status = 'timed-out', completed_at = ?
+                    WHERE status = 'pending' AND expires_at <= ?
+                    """,
+                arguments: [now, now]
+            )
+            return try Row.fetchAll(
+                database,
+                sql: """
+                    SELECT command_id, device_id, component_id, capability,
+                           status, requested_at, completed_at
+                    FROM device_commands
+                    ORDER BY requested_at DESC
+                    """
+            ).compactMap { row in
+                guard let deviceID = DwellIdentifier(
+                    rawValue: row["device_id"]
+                ),
+                    let componentID = DwellIdentifier(
+                        rawValue: row["component_id"]
+                    ),
+                    let status = DeviceCommandSnapshot.Status(
+                        rawValue: row["status"]
+                    )
+                else {
+                    return nil
+                }
+                return DeviceCommandSnapshot(
+                    commandID: row["command_id"],
+                    deviceID: deviceID,
+                    componentID: componentID,
+                    capability: row["capability"],
+                    status: status,
+                    requestedAt: row["requested_at"],
+                    completedAt: row["completed_at"]
+                )
+            }
+        }
+    }
+
     private static func projectsLatestState(_ message: CanonicalMessage) -> Bool {
         switch message.body {
-        case .quantity, .boolean, .level, .enumeration, .availability:
+        case .deviceMetadata, .quantity, .boolean, .level, .enumeration,
+             .availability:
             true
         case .command, .acknowledgement:
             false
@@ -197,6 +253,85 @@ public final class HistoryStore: CanonicalMessageIngesting, Sendable {
                 sql: "INSERT INTO store_metadata (singleton) VALUES (1)"
             )
         }
+        migrator.registerMigration("v2-command-lifecycle") { database in
+            try database.create(table: "device_commands") { table in
+                table.column("command_id", .text).primaryKey()
+                table.column("device_id", .text).notNull().indexed()
+                table.column("component_id", .text).notNull()
+                table.column("capability", .text).notNull()
+                table.column("status", .text).notNull()
+                table.column("requested_at", .datetime).notNull()
+                table.column("expires_at", .datetime).notNull().indexed()
+                table.column("completed_at", .datetime)
+            }
+        }
         return migrator
+    }
+
+    private static func projectCommandLifecycle(
+        _ message: CanonicalMessage,
+        publication: MQTTMessage,
+        receivedAt: Date,
+        database: Database
+    ) throws {
+        let topic = try? CanonicalTopic(parsing: publication.topic)
+        switch (topic?.route, message.body) {
+        case let (
+            .deviceCommand(device, component, capability),
+            .command(command)
+        ):
+            try database.execute(
+                sql: """
+                    INSERT OR IGNORE INTO device_commands
+                        (command_id, device_id, component_id, capability,
+                         status, requested_at, expires_at)
+                    VALUES (?, ?, ?, ?, 'pending', ?, ?)
+                    """,
+                arguments: [
+                    command.commandID.rawValue,
+                    device.rawValue,
+                    component.rawValue,
+                    capability.rawValue,
+                    receivedAt,
+                    command.expiresAt,
+                ]
+            )
+
+        case let (.deviceAcknowledgement, .acknowledgement(acknowledgement)):
+            try database.execute(
+                sql: """
+                    UPDATE device_commands
+                    SET status = ?, completed_at = ?
+                    WHERE command_id = ?
+                    """,
+                arguments: [
+                    clientStatus(acknowledgement.status).rawValue,
+                    receivedAt,
+                    acknowledgement.commandID.rawValue,
+                ]
+            )
+
+        default:
+            break
+        }
+    }
+
+    private static func clientStatus(
+        _ status: CommandAcknowledgement.Status
+    ) -> DeviceCommandSnapshot.Status {
+        switch status {
+        case .accepted:
+            .pending
+        case .applied:
+            .applied
+        case .rejected:
+            .rejected
+        case .failed:
+            .failed
+        case .expired:
+            .expired
+        case .unknownOutcome:
+            .unknownOutcome
+        }
     }
 }

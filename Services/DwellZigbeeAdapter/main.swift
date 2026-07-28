@@ -55,18 +55,29 @@ private enum ZigbeeAdapterRuntime {
 
         var directory = ZigbeeDeviceDirectory()
         var pendingState: [String: Data] = [:]
+        var pendingCommands: [String: PendingCommand] = [:]
         let translator = ZigbeeStateTranslator()
         for try await message in messages {
             if message.topic == "\(baseTopic)/bridge/devices" {
                 let discoveredDevices = directory.update(from: message.payload)
-                for deviceID in discoveredDevices {
+                for device in discoveredDevices {
                     let publication = try translator.translateDiscovery(
                         installationID: installationID,
-                        deviceID: deviceID
+                        deviceID: device.id
                     )
                     try await transport.publish(
                         publication.payload,
                         to: publication.topic,
+                        retain: true
+                    )
+                    let metadata = try translator.translateMetadata(
+                        device.metadata,
+                        installationID: installationID,
+                        deviceID: device.id
+                    )
+                    try await transport.publish(
+                        metadata.payload,
+                        to: metadata.topic,
                         retain: true
                     )
                 }
@@ -100,9 +111,27 @@ private enum ZigbeeAdapterRuntime {
                     from: message,
                     baseTopic: baseTopic
                 ) {
+                    pendingCommands[
+                        "\(command.deviceID.rawValue)/\(command.capability)"
+                    ] = PendingCommand(
+                        commandID: command.commandID,
+                        capability: command.capability
+                    )
                     try await transport.publish(
                         command.payload,
                         to: command.topic,
+                        retain: false
+                    )
+                    let acknowledgement = try translator.translateAcknowledgement(
+                        commandID: command.commandID,
+                        capability: command.capability,
+                        status: "accepted",
+                        installationID: installationID,
+                        deviceID: command.deviceID
+                    )
+                    try await transport.publish(
+                        acknowledgement.payload,
+                        to: acknowledgement.topic,
                         retain: false
                     )
                 }
@@ -135,8 +164,42 @@ private enum ZigbeeAdapterRuntime {
                     retain: true
                 )
             }
+            for capability in Self.reportedCapabilities(in: message.payload) {
+                let key = "\(deviceID.rawValue)/\(capability)"
+                guard let command = pendingCommands.removeValue(forKey: key) else {
+                    continue
+                }
+                let acknowledgement = try translator.translateAcknowledgement(
+                    commandID: command.commandID,
+                    capability: command.capability,
+                    status: "applied",
+                    installationID: installationID,
+                    deviceID: deviceID
+                )
+                try await transport.publish(
+                    acknowledgement.payload,
+                    to: acknowledgement.topic,
+                    retain: false
+                )
+            }
         }
         await transport.disconnect()
+    }
+
+    private static func reportedCapabilities(in payload: Data) -> [String] {
+        guard let object = try? JSONSerialization.jsonObject(with: payload)
+            as? [String: Any]
+        else {
+            return []
+        }
+        var result: [String] = []
+        if object["state"] != nil {
+            result.append("light.on")
+        }
+        if object["brightness"] != nil {
+            result.append("light.level")
+        }
+        return result
     }
 
     private static func loadConfiguration() throws -> BrokerConfiguration? {
@@ -182,17 +245,27 @@ private enum ZigbeeAdapterRuntime {
     }
 }
 
+private struct PendingCommand {
+    let commandID: String
+    let capability: String
+}
+
+private struct DiscoveredDevice {
+    let id: DwellIdentifier
+    let metadata: ZigbeeDeviceMetadata
+}
+
 private struct ZigbeeDeviceDirectory {
     private var deviceByFriendlyName: [String: DwellIdentifier] = [:]
     private var friendlyNameByDevice: [DwellIdentifier: String] = [:]
 
-    mutating func update(from payload: Data) -> [DwellIdentifier] {
+    mutating func update(from payload: Data) -> [DiscoveredDevice] {
         guard let devices = try? JSONSerialization.jsonObject(with: payload)
             as? [[String: Any]]
         else {
             return []
         }
-        var discoveredDevices: [DwellIdentifier] = []
+        var discoveredDevices: [DiscoveredDevice] = []
         for device in devices {
             guard let friendlyName = device["friendly_name"] as? String,
                   let ieeeAddress = device["ieee_address"] as? String,
@@ -203,7 +276,15 @@ private struct ZigbeeDeviceDirectory {
             deviceByFriendlyName[friendlyName] = identifier
             friendlyNameByDevice[identifier] = friendlyName
             if device["type"] as? String != "Coordinator" {
-                discoveredDevices.append(identifier)
+                discoveredDevices.append(
+                    DiscoveredDevice(
+                        id: identifier,
+                        metadata: Self.metadata(
+                            from: device,
+                            friendlyName: friendlyName
+                        )
+                    )
+                )
             }
         }
         return discoveredDevices
@@ -216,7 +297,13 @@ private struct ZigbeeDeviceDirectory {
     func zigbeeCommand(
         from message: MQTTMessage,
         baseTopic: String
-    ) -> (topic: String, payload: Data)? {
+    ) -> (
+        topic: String,
+        payload: Data,
+        commandID: String,
+        deviceID: DwellIdentifier,
+        capability: String
+    )? {
         let segments = message.topic.split(separator: "/").map(String.init)
         guard segments.count == 10,
               segments[4] == "device",
@@ -226,6 +313,7 @@ private struct ZigbeeDeviceDirectory {
                   with: message.payload
               ) as? [String: Any],
               let body = envelope["body"] as? [String: Any]
+              , let commandID = body["commandId"] as? String
         else {
             return nil
         }
@@ -249,7 +337,45 @@ private struct ZigbeeDeviceDirectory {
         ) else {
             return nil
         }
-        return ("\(baseTopic)/\(friendlyName)/set", payload)
+        return (
+            "\(baseTopic)/\(friendlyName)/set",
+            payload,
+            commandID,
+            deviceID,
+            capability
+        )
+    }
+
+    private static func metadata(
+        from device: [String: Any],
+        friendlyName: String
+    ) -> ZigbeeDeviceMetadata {
+        let definition = device["definition"] as? [String: Any]
+        let exposes = definition?["exposes"] as? [[String: Any]] ?? []
+        let propertyNames = Set(
+            exposes.flatMap(Self.exposedProperties)
+        )
+        return ZigbeeDeviceMetadata(
+            deviceName: friendlyName,
+            manufacturer: definition?["vendor"] as? String,
+            model: definition?["model"] as? String,
+            exposesTemperature: propertyNames.contains("temperature"),
+            exposesLightOn: propertyNames.contains("state"),
+            exposesLightLevel: propertyNames.contains("brightness")
+        )
+    }
+
+    private static func exposedProperties(
+        _ expose: [String: Any]
+    ) -> [String] {
+        var result: [String] = []
+        if let property = expose["property"] as? String {
+            result.append(property)
+        }
+        if let features = expose["features"] as? [[String: Any]] {
+            result.append(contentsOf: features.flatMap(exposedProperties))
+        }
+        return result
     }
 
     private static func identifier(

@@ -105,6 +105,16 @@ public struct CanonicalMessageDecoder: Sendable {
     ) throws -> CanonicalBody {
         do {
             switch schema {
+            case .deviceMetadata:
+                let body: DeviceComponentMetadata = try Self.decode(value)
+                guard body.deviceName.isEmpty == false,
+                      body.componentName.isEmpty == false,
+                      body.capabilities.allSatisfy(Self.validMetadataCapability)
+                else {
+                    throw BodyValidationError.invalid
+                }
+                return .deviceMetadata(body)
+
             case .quantityState:
                 let body: QuantityState = try Self.decode(value)
                 guard body.value.isFinite, body.unit.isEmpty == false else {
@@ -178,12 +188,31 @@ public struct CanonicalMessageDecoder: Sendable {
         return try makeJSONDecoder().decode(Value.self, from: data)
     }
 
+    private static func validMetadataCapability(
+        _ capability: CapabilityMetadata
+    ) -> Bool {
+        guard CapabilityName(rawValue: capability.capability) != nil,
+              capability.displayName.isEmpty == false,
+              capability.minimum?.isFinite ?? true,
+              capability.maximum?.isFinite ?? true
+        else {
+            return false
+        }
+        if let minimum = capability.minimum,
+           let maximum = capability.maximum
+        {
+            return minimum <= maximum
+        }
+        return true
+    }
+
     private static func route(
         _ route: CanonicalTopic.Route,
         accepts schema: CanonicalSchema
     ) -> Bool {
         switch (route, schema) {
-        case (.deviceState, .quantityState),
+        case (.deviceMetadata, .deviceMetadata),
+             (.deviceState, .quantityState),
              (.deviceState, .booleanState),
              (.deviceState, .levelState),
              (.deviceState, .enumerationState),

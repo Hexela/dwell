@@ -4,6 +4,7 @@
 // License, v. 2.0.
 
 import Foundation
+import DwellDomain
 
 /// A durable latest-state projection suitable for startup reconciliation.
 public struct PersistedState: Equatable, Sendable {
@@ -43,4 +44,16 @@ public struct HistoryStoreStatus: Equatable, Sendable {
         self.messageCount = messageCount
         self.latestCommitAt = latestCommitAt
     }
+}
+
+/// A durable command lifecycle record suitable for client presentation.
+public struct PersistedCommand: Equatable, Sendable {
+    public let commandID: String
+    public let deviceID: DwellIdentifier
+    public let componentID: DwellIdentifier
+    public let capability: String
+    public let status: DeviceCommandSnapshot.Status
+    public let requestedAt: Date
+    public let expiresAt: Date
+    public let completedAt: Date?
 }

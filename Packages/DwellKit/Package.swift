@@ -85,7 +85,7 @@ let package = Package(
         ),
         .testTarget(
             name: "DwellIPCTests",
-            dependencies: ["DwellIPC"]
+            dependencies: ["DwellDomain", "DwellIPC"]
         ),
         .testTarget(
             name: "DwellMQTTTests",
@@ -101,7 +101,7 @@ let package = Package(
         ),
         .testTarget(
             name: "DwellRegistryTests",
-            dependencies: ["DwellRegistry", "DwellSchemas"]
+            dependencies: ["DwellRegistry", "DwellSchemas", "DwellZigbee"]
         ),
         .testTarget(
             name: "DwellZigbeeTests",

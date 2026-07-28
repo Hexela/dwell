@@ -11,5 +11,10 @@ public enum DwellServiceConstants {
 
     /// The LaunchDaemon property-list filename embedded in Dwell.app.
     public static let launchDaemonPlistName =
-        "com.hexela.dwell.daemon.v2.plist"
+        "com.hexela.dwell.daemon.v3.plist"
+
+    /// Earlier service registrations that the app retires during migration.
+    public static let legacyLaunchDaemonPlistNames = [
+        "com.hexela.dwell.daemon.v2.plist",
+    ]
 }

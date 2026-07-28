@@ -4,6 +4,7 @@
 // License, v. 2.0.
 
 import DwellHistory
+import DwellDomain
 import DwellMQTT
 import DwellSchemas
 import Foundation
@@ -141,6 +142,63 @@ struct HistoryStoreTests {
         #expect(try await reopenedStore.status().messageCount == 1)
     }
 
+    @Test("Command lifecycle moves from pending to applied")
+    func commandLifecycleIsProjected() async throws {
+        let store = try HistoryStore(inMemory: true)
+        let command = try publication(
+            topic: "dwell/v1/i/home-a/device/light/component/main/command/light.level",
+            fixture: "light-command",
+            now: .distantPast
+        )
+        _ = try await store.ingest(
+            command.message,
+            publication: command.publication,
+            receivedAt: Date(timeIntervalSince1970: 100)
+        )
+        #expect(
+            try await store.commandSnapshots(
+                now: Date(timeIntervalSince1970: 101)
+            ).first?.status == .pending
+        )
+
+        let acknowledgement = try publication(
+            topic: "dwell/v1/i/home-a/device/light/component/main/ack/light.level",
+            fixture: "light-acknowledgement"
+        )
+        _ = try await store.ingest(
+            acknowledgement.message,
+            publication: acknowledgement.publication,
+            receivedAt: Date(timeIntervalSince1970: 102)
+        )
+        let snapshot = try #require(
+            try await store.commandSnapshots(
+                now: Date(timeIntervalSince1970: 103)
+            ).first
+        )
+        #expect(snapshot.commandID == "cmd-001")
+        #expect(snapshot.status == .applied)
+    }
+
+    @Test("Unacknowledged commands time out")
+    func commandTimeoutIsDerived() async throws {
+        let store = try HistoryStore(inMemory: true)
+        let command = try publication(
+            topic: "dwell/v1/i/home-a/device/light/component/main/command/light.level",
+            fixture: "light-command",
+            now: .distantPast
+        )
+        _ = try await store.ingest(
+            command.message,
+            publication: command.publication,
+            receivedAt: Date(timeIntervalSince1970: 100)
+        )
+
+        #expect(
+            try await store.commandSnapshots(now: .distantFuture)
+                .first?.status == .timedOut
+        )
+    }
+
     private static let temperatureTopic =
         "dwell/v1/i/home-a/device/sensor/component/main/state/sensor.temperature"
 
@@ -153,6 +211,29 @@ struct HistoryStoreTests {
             contentsOf: root.appending(
                 path: "Tests/Fixtures/MQTT/v1/valid/\(name).json"
             )
+        )
+    }
+
+    private func publication(
+        topic: String,
+        fixture: String,
+        now: Date = Date()
+    ) throws -> (message: CanonicalMessage, publication: MQTTMessage) {
+        let payload = try Self.fixture(named: fixture)
+        let publication = MQTTMessage(
+            topic: topic,
+            payload: payload,
+            qualityOfService: 1,
+            isRetained: false,
+            isDuplicate: false
+        )
+        return (
+            try CanonicalMessageDecoder().decode(
+                payload,
+                for: CanonicalTopic(parsing: topic),
+                now: now
+            ),
+            publication
         )
     }
 }

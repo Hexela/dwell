@@ -15,12 +15,50 @@ final class ServiceStatusModel {
     private let service = SMAppService.daemon(
         plistName: DwellServiceConstants.launchDaemonPlistName
     )
+    private let legacyServices = DwellServiceConstants
+        .legacyLaunchDaemonPlistNames
+        .map(SMAppService.daemon(plistName:))
     private let client: any DwellServiceClient
+    private var didAttemptLegacyMigration = false
 
     private(set) var registrationState: ServiceRegistrationState = .notRegistered
     private(set) var snapshot: HealthSnapshot?
     private(set) var errorMessage: String?
     private(set) var isWorking = false
+
+    var bundledServiceVersion: String {
+        [
+            Bundle.main.object(
+                forInfoDictionaryKey: "CFBundleShortVersionString"
+            ) as? String ?? "0.1.0",
+            Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion")
+                as? String ?? "1",
+        ].joined(separator: " (") + ")"
+    }
+
+    var isServiceUpdateRecommended: Bool {
+        guard registrationState == .enabled,
+              let snapshot
+        else {
+            return false
+        }
+        return snapshot.serviceVersion != bundledServiceVersion
+    }
+
+    var canInstallPrivilegedService: Bool {
+        CodeSigningIdentity.teamIdentifier != nil
+    }
+
+    var developmentSigningMessage: String? {
+        guard canInstallPrivilegedService == false else {
+            return nil
+        }
+        return """
+            This Xcode build is signed to run locally and cannot install its \
+            privileged daemon. Select an Apple Development team in Xcode, \
+            rebuild, then update the service.
+            """
+    }
 
     init(
         client: any DwellServiceClient = XPCDwellServiceClient(role: .application)
@@ -45,6 +83,7 @@ final class ServiceStatusModel {
     }
 
     private func refresh(showsProgress: Bool) async {
+        await migrateLegacyServiceIfNeeded()
         updateRegistrationState()
         guard registrationState == .enabled else {
             snapshot = nil
@@ -73,7 +112,13 @@ final class ServiceStatusModel {
         isWorking = true
         defer { isWorking = false }
 
+        guard canInstallPrivilegedService else {
+            errorMessage = developmentSigningMessage
+            return
+        }
+
         do {
+            try await unregisterLegacyServices()
             try service.register()
             errorMessage = nil
         } catch {
@@ -89,6 +134,7 @@ final class ServiceStatusModel {
 
         do {
             try await service.unregister()
+            try await unregisterLegacyServices()
             snapshot = nil
             errorMessage = nil
         } catch {
@@ -96,6 +142,28 @@ final class ServiceStatusModel {
         }
 
         updateRegistrationState()
+    }
+
+    func updateService() async {
+        isWorking = true
+        defer { isWorking = false }
+
+        guard canInstallPrivilegedService else {
+            errorMessage = developmentSigningMessage
+            return
+        }
+
+        do {
+            try await service.unregister()
+            try await unregisterLegacyServices()
+            try service.register()
+            errorMessage = nil
+        } catch {
+            errorMessage = "Dwell could not update the daemon: \(error.localizedDescription)"
+        }
+
+        updateRegistrationState()
+        await refresh(showsProgress: false)
     }
 
     func openApprovalSettings() {
@@ -114,6 +182,46 @@ final class ServiceStatusModel {
             bundledServiceIsPresent ? .notRegistered : .notFound
         @unknown default:
             .notFound
+        }
+    }
+
+    private func migrateLegacyServiceIfNeeded() async {
+        guard didAttemptLegacyMigration == false else {
+            return
+        }
+        didAttemptLegacyMigration = true
+
+        guard service.status == .notRegistered || service.status == .notFound,
+              legacyServices.contains(where: {
+                  $0.status == .enabled || $0.status == .requiresApproval
+              })
+        else {
+            return
+        }
+
+        guard canInstallPrivilegedService else {
+            errorMessage = developmentSigningMessage
+            return
+        }
+
+        do {
+            try await unregisterLegacyServices()
+            try service.register()
+            errorMessage = nil
+        } catch {
+            errorMessage = """
+                Dwell could not migrate its privileged service: \
+                \(error.localizedDescription)
+                """
+        }
+    }
+
+    private func unregisterLegacyServices() async throws {
+        for legacyService in legacyServices
+        where legacyService.status != .notRegistered
+            && legacyService.status != .notFound
+        {
+            try await legacyService.unregister()
         }
     }
 

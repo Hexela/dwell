@@ -8,6 +8,7 @@ import DwellDomain
 
 /// A canonical schema family supported by the v1 decoder.
 public enum CanonicalSchema: String, CaseIterable, Sendable {
+    case deviceMetadata = "io.dwell.device-metadata"
     case quantityState = "io.dwell.state.quantity"
     case booleanState = "io.dwell.state.boolean"
     case levelState = "io.dwell.state.level"
@@ -34,6 +35,8 @@ public enum CanonicalSchema: String, CaseIterable, Sendable {
     /// The checked-in JSON Schema filename for this family.
     public var filename: String {
         switch self {
+        case .deviceMetadata:
+            "device-metadata.schema.json"
         case .quantityState:
             "state-quantity.schema.json"
         case .booleanState:

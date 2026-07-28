@@ -62,4 +62,53 @@ struct ZigbeeStateTranslatorTests {
             )
         }
     }
+
+    @Test("Discovery metadata and acknowledgements are canonical")
+    func metadataAndAcknowledgementAreCanonical() throws {
+        let installation = try #require(DwellIdentifier(rawValue: "home-a"))
+        let device = try #require(
+            DwellIdentifier(rawValue: "zb-00124b00251c7e9d")
+        )
+        let translator = ZigbeeStateTranslator()
+        let metadata = try translator.translateMetadata(
+            ZigbeeDeviceMetadata(
+                deviceName: "Kitchen lamp",
+                manufacturer: "Acme",
+                model: "Dimmer 1",
+                exposesLightOn: true,
+                exposesLightLevel: true
+            ),
+            installationID: installation,
+            deviceID: device,
+            observedAt: Date(timeIntervalSince1970: 1_700_000_000)
+        )
+        let metadataMessage = try CanonicalMessageDecoder().decode(
+            metadata.payload,
+            for: CanonicalTopic(parsing: metadata.topic)
+        )
+        guard case let .deviceMetadata(body) = metadataMessage.body else {
+            Issue.record("Expected device metadata")
+            return
+        }
+        #expect(body.deviceName == "Kitchen lamp")
+        #expect(body.capabilities.map(\.capability) == ["light.on", "light.level"])
+
+        let acknowledgement = try translator.translateAcknowledgement(
+            commandID: "command-1",
+            capability: "light.level",
+            status: "applied",
+            installationID: installation,
+            deviceID: device
+        )
+        let acknowledgementMessage = try CanonicalMessageDecoder().decode(
+            acknowledgement.payload,
+            for: CanonicalTopic(parsing: acknowledgement.topic)
+        )
+        guard case let .acknowledgement(body) = acknowledgementMessage.body else {
+            Issue.record("Expected command acknowledgement")
+            return
+        }
+        #expect(body.commandID.rawValue == "command-1")
+        #expect(body.status == .applied)
+    }
 }

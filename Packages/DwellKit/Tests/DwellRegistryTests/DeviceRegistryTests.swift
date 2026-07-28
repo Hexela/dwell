@@ -3,8 +3,10 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0.
 
+import DwellDomain
 import DwellRegistry
 import DwellSchemas
+import DwellZigbee
 import Foundation
 import Testing
 
@@ -28,6 +30,35 @@ struct DeviceRegistryTests {
         #expect(snapshot.devices.first?.deviceID.rawValue == "sensor")
         #expect(snapshot.devices.first?.capabilities.count == 1)
         #expect(snapshot.devices.first?.capabilities.first?.value == .number(21.4, unit: "cel"))
+    }
+
+    @Test("Metadata enriches a device without changing its stable identity")
+    func metadataEnrichesDevice() async throws {
+        let registry = DeviceRegistry()
+        let installation = try #require(DwellIdentifier(rawValue: "home-a"))
+        let device = try #require(DwellIdentifier(rawValue: "zb-001"))
+        let translation = try ZigbeeStateTranslator().translateMetadata(
+            ZigbeeDeviceMetadata(
+                deviceName: "Kitchen light",
+                manufacturer: "Acme",
+                model: "A1",
+                exposesLightOn: true
+            ),
+            installationID: installation,
+            deviceID: device
+        )
+        let topic = try CanonicalTopic(parsing: translation.topic)
+        let message = try CanonicalMessageDecoder().decode(
+            translation.payload,
+            for: topic
+        )
+        await registry.ingest(message, from: topic)
+
+        let snapshot = try #require(await registry.snapshot().devices.first)
+        #expect(snapshot.deviceID == device)
+        #expect(snapshot.displayName == "Kitchen light")
+        #expect(snapshot.manufacturer == "Acme")
+        #expect(snapshot.model == "A1")
     }
 
     private func fixture(named name: String) throws -> Data {

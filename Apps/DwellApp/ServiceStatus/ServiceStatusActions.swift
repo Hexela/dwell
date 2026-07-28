@@ -27,6 +27,11 @@ struct ServiceStatusActions: View {
                 Button("Unregister", role: .destructive, action: unregister)
             case .enabled:
                 Button("Refresh", systemImage: "arrow.clockwise", action: refresh)
+                Button(
+                    "Update Service",
+                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90",
+                    action: updateService
+                )
                 Button("Unregister", role: .destructive, action: unregister)
             case .notFound:
                 Text("Build Dwell again to restore the embedded daemon.")
@@ -51,6 +56,12 @@ struct ServiceStatusActions: View {
     private func refresh() {
         Task {
             await model.refresh()
+        }
+    }
+
+    private func updateService() {
+        Task {
+            await model.updateService()
         }
     }
 }

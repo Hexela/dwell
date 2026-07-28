@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01406A9ECFA673361E3F9EA8 /* DeviceSnapshotCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B777E4358375D2A97A4B3A36 /* DeviceSnapshotCompatibilityTests.swift */; };
 		037C0D995F1D5F118501CFEB /* DwellDomain in Frameworks */ = {isa = PBXBuildFile; productRef = E343B51CE9A9A1E8BEF062C2 /* DwellDomain */; };
 		074F187828883E912D39E400 /* DeviceCommandDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F076931C282A79DE509A72 /* DeviceCommandDispatcher.swift */; };
 		084B242A28AD1D22E0D7904D /* MetadataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A4E713F47913F921644841 /* MetadataStoreTests.swift */; };
@@ -16,6 +17,7 @@
 		2A4F0BAE9D53561DF7B86426 /* AdapterSupervisor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE42BB8377AC10E1069F7BB /* AdapterSupervisor.swift */; };
 		304A46F066C2869255F63E9E /* ServiceStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8151ED798C09156A3981B /* ServiceStatusView.swift */; };
 		3188D1EDAF307BF58924BEBB /* DwellXPCServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEB4E240BFC40D953B6827F /* DwellXPCServiceTests.swift */; };
+		3A59A165138BD976E163277E /* AdapterSupervisorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B233CC733A9FE606EBAA2B30 /* AdapterSupervisorTests.swift */; };
 		40C4A08747B1C67EC703258E /* DwellMQTT in Frameworks */ = {isa = PBXBuildFile; productRef = B8AE8A4211BA38A64EBC7550 /* DwellMQTT */; };
 		44F4C03E305B6289232FED18 /* DeviceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C89E5EFFBA60CB553EB865 /* DeviceListView.swift */; };
 		46443E55DED36C6255119AF4 /* DwellXPCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD01753EA2EA6B666B39EF8D /* DwellXPCService.swift */; };
@@ -32,6 +34,7 @@
 		76F069323E0105B187359E23 /* DwellIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 461C6CCC5986AE2E0031163C /* DwellIPC */; };
 		7A99783BB963D7088309E35A /* DwellIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 23D635117E5F04A1F877896C /* DwellIPC */; };
 		83B2834429E20AA99CDB8338 /* DwellPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 7B5041C98A1A07C14453F883 /* DwellPersistence */; };
+		85977E3D4A40E51129DC8F2F /* DeviceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE82BB36515434144EBCFC56 /* DeviceRowView.swift */; };
 		968413648612F51524C296DE /* HealthSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428D7B50940297976850A160 /* HealthSnapshotTests.swift */; };
 		9929EB7165D3B4CB380BC724 /* DwellMQTT in Frameworks */ = {isa = PBXBuildFile; productRef = 63DAF42E4F72665B3A708436 /* DwellMQTT */; };
 		9C56483AAABA1BBBD56A2D7E /* DwellIPC in Frameworks */ = {isa = PBXBuildFile; productRef = BC05CA3521586DEC5100E7D9 /* DwellIPC */; };
@@ -45,6 +48,7 @@
 		AD56CA48318B2863F05D6329 /* DwellXPCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD01753EA2EA6B666B39EF8D /* DwellXPCService.swift */; };
 		B6BF53849BDE2C5248C1D920 /* ServiceStatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8CC42512088A39671DEFAB /* ServiceStatusModel.swift */; };
 		B8488B5CF316CC5586E634A8 /* FixtureSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF28A6A0F38287635825EC6 /* FixtureSupport.swift */; };
+		BA13B841503A67AF28B277CD /* CapabilityControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5985F5D468862A79AC4ED91 /* CapabilityControlView.swift */; };
 		BA51FD4D5D0A4DE87206C807 /* DwellDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 9AF376D78975E67EA08EDA65 /* DwellDomain */; };
 		BB62EE2F8E86E396423EFA1A /* DevelopmentBrokerConfigurationLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA351918B4250F959E35D0EC /* DevelopmentBrokerConfigurationLoader.swift */; };
 		BC614377ADDB70DD665DEB88 /* DwellMQTTNIO in Frameworks */ = {isa = PBXBuildFile; productRef = 1FB4CE12605B51D493101C6A /* DwellMQTTNIO */; };
@@ -61,6 +65,7 @@
 		DA24523D3EBE07F875D55090 /* DwellXPCListenerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3548FB2AEC5C690C10E5749 /* DwellXPCListenerDelegate.swift */; };
 		DCE7F30B6C7A26C32D889B8A /* ServiceStatusActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7DE7A69D252809DB3C74BC /* ServiceStatusActions.swift */; };
 		DF064346F2D3BC5A5652936A /* DwellHistory in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7EDB3FEB10D1A92354F4BC /* DwellHistory */; };
+		E5C57379DC36C7EF31ECB63E /* CodeSigningIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBD3ED559ABE73F0294315B /* CodeSigningIdentity.swift */; };
 		E6875727E1690CDAB189B354 /* DwellSchemas in Frameworks */ = {isa = PBXBuildFile; productRef = E9B75F95C1135B479B6AB1F9 /* DwellSchemas */; };
 		E858A983C4DC7C964EB45DC3 /* DaemonRuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F9A3A3CD94337C5BD8B22 /* DaemonRuntimeTests.swift */; };
 		E876A5C0BA71388A67BD9D7D /* DwellApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB42DB086B9F5CCFE040860 /* DwellApp.swift */; };
@@ -110,14 +115,19 @@
 		AA351918B4250F959E35D0EC /* DevelopmentBrokerConfigurationLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentBrokerConfigurationLoader.swift; sourceTree = "<group>"; };
 		ABEB4E240BFC40D953B6827F /* DwellXPCServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwellXPCServiceTests.swift; sourceTree = "<group>"; };
 		AF8CC42512088A39671DEFAB /* ServiceStatusModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceStatusModel.swift; sourceTree = "<group>"; };
+		B233CC733A9FE606EBAA2B30 /* AdapterSupervisorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdapterSupervisorTests.swift; sourceTree = "<group>"; };
+		B777E4358375D2A97A4B3A36 /* DeviceSnapshotCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSnapshotCompatibilityTests.swift; sourceTree = "<group>"; };
+		BE82BB36515434144EBCFC56 /* DeviceRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRowView.swift; sourceTree = "<group>"; };
 		C05A771A0E65850DA7AD43DA /* JSONSchemaTestValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSchemaTestValidator.swift; sourceTree = "<group>"; };
 		C19CDB96D0F1026201786F58 /* DwellDaemon */ = {isa = PBXFileReference; includeInIndex = 0; path = DwellDaemon; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7C89E5EFFBA60CB553EB865 /* DeviceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListView.swift; sourceTree = "<group>"; };
 		C9EF58ACF7066114441182BB /* CanonicalTopicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalTopicTests.swift; sourceTree = "<group>"; };
 		CC64816DAE384251E69B9D88 /* HistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStoreTests.swift; sourceTree = "<group>"; };
 		D407CD9C06D372820781A80C /* DwellKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DwellKit; path = Packages/DwellKit; sourceTree = SOURCE_ROOT; };
+		D5985F5D468862A79AC4ED91 /* CapabilityControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilityControlView.swift; sourceTree = "<group>"; };
 		DBE42BB8377AC10E1069F7BB /* AdapterSupervisor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdapterSupervisor.swift; sourceTree = "<group>"; };
 		DD01753EA2EA6B666B39EF8D /* DwellXPCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DwellXPCService.swift; sourceTree = "<group>"; };
+		DEBD3ED559ABE73F0294315B /* CodeSigningIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeSigningIdentity.swift; sourceTree = "<group>"; };
 		E0F13ED30104CDBDAF0404B0 /* DeviceListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListModel.swift; sourceTree = "<group>"; };
 		E2D4649DF3A143E899075DDC /* DaemonRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaemonRuntime.swift; sourceTree = "<group>"; };
 		E49574810C72351EF840F958 /* CanonicalMessageDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalMessageDecoderTests.swift; sourceTree = "<group>"; };
@@ -241,8 +251,10 @@
 		5707F41557AE3CA5D25D923F /* Devices */ = {
 			isa = PBXGroup;
 			children = (
+				D5985F5D468862A79AC4ED91 /* CapabilityControlView.swift */,
 				E0F13ED30104CDBDAF0404B0 /* DeviceListModel.swift */,
 				C7C89E5EFFBA60CB553EB865 /* DeviceListView.swift */,
+				BE82BB36515434144EBCFC56 /* DeviceRowView.swift */,
 			);
 			path = Devices;
 			sourceTree = "<group>";
@@ -250,6 +262,7 @@
 		5AD1DCD858489EAB82FE90D0 /* DwellIPCTests */ = {
 			isa = PBXGroup;
 			children = (
+				B777E4358375D2A97A4B3A36 /* DeviceSnapshotCompatibilityTests.swift */,
 				428D7B50940297976850A160 /* HealthSnapshotTests.swift */,
 			);
 			name = DwellIPCTests;
@@ -289,6 +302,7 @@
 		A48A89DB5F0B0DD62C3A06D6 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				B233CC733A9FE606EBAA2B30 /* AdapterSupervisorTests.swift */,
 				F26F9A3A3CD94337C5BD8B22 /* DaemonRuntimeTests.swift */,
 				ABEB4E240BFC40D953B6827F /* DwellXPCServiceTests.swift */,
 			);
@@ -367,6 +381,7 @@
 		F4F9A88A39DBDE89F7D39E63 /* ServiceStatus */ = {
 			isa = PBXGroup;
 			children = (
+				DEBD3ED559ABE73F0294315B /* CodeSigningIdentity.swift */,
 				0B6F43B223DB0D4FFB4764FE /* ServiceRegistrationState.swift */,
 				7F7DE7A69D252809DB3C74BC /* ServiceStatusActions.swift */,
 				AF8CC42512088A39671DEFAB /* ServiceStatusModel.swift */,
@@ -505,23 +520,23 @@
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					0A8868B46C17DEF3363CA67F = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = DY9P4K9PWF;
 						ProvisioningStyle = Automatic;
 					};
 					1250D47E0C62B47482B73D5D = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = DY9P4K9PWF;
 						ProvisioningStyle = Automatic;
 					};
 					615778460FEFE0711750AD7E = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = DY9P4K9PWF;
 						ProvisioningStyle = Automatic;
 					};
 					86A0AD04F6576A6D4A78C1B5 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = DY9P4K9PWF;
 						ProvisioningStyle = Automatic;
 					};
 					AE0DAB3160CDCE0C90FA9168 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = DY9P4K9PWF;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -581,7 +596,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -eu\ndaemon_directory=\"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Resources\"\nplist_directory=\"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LaunchDaemons\"\n/bin/mkdir -p \"${daemon_directory}\" \"${plist_directory}\"\n/usr/bin/ditto \"${BUILT_PRODUCTS_DIR}/DwellDaemon\" \"${daemon_directory}/DwellDaemon\"\n/usr/bin/ditto \"${BUILT_PRODUCTS_DIR}/DwellZigbeeAdapter\" \"${daemon_directory}/DwellZigbeeAdapter\"\n/usr/bin/ditto \"${SRCROOT}/Config/LaunchDaemons/com.hexela.dwell.daemon.v2.plist\" \"${plist_directory}/com.hexela.dwell.daemon.v2.plist\"\nlocal_broker_configuration=\"${SRCROOT}/Config/Local/development-broker.json\"\nfallback_broker_configuration=\"${SRCROOT}/Config/development-broker.json\"\nbroker_configuration=\"\"\nif [ -f \"${local_broker_configuration}\" ]; then\n  broker_configuration=\"${local_broker_configuration}\"\nelif [ -f \"${fallback_broker_configuration}\" ]; then\n  broker_configuration=\"${fallback_broker_configuration}\"\nfi\nif [ -n \"${broker_configuration}\" ]; then\n  /usr/bin/ditto \"${broker_configuration}\" \"${daemon_directory}/development-broker.json\"\n  echo \"Embedded MQTT broker configuration from ${broker_configuration}\"\nelse\n  echo \"No development MQTT broker configuration found\"\nfi\n";
+			shellScript = "set -eu\ndaemon_directory=\"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Resources\"\nplist_directory=\"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LaunchDaemons\"\n/bin/mkdir -p \"${daemon_directory}\" \"${plist_directory}\"\n/usr/bin/ditto \"${BUILT_PRODUCTS_DIR}/DwellDaemon\" \"${daemon_directory}/DwellDaemon\"\n/usr/bin/ditto \"${BUILT_PRODUCTS_DIR}/DwellZigbeeAdapter\" \"${daemon_directory}/DwellZigbeeAdapter\"\n/usr/bin/ditto \"${SRCROOT}/Config/LaunchDaemons/com.hexela.dwell.daemon.v2.plist\" \"${plist_directory}/com.hexela.dwell.daemon.v2.plist\"\n/usr/bin/ditto \"${SRCROOT}/Config/LaunchDaemons/com.hexela.dwell.daemon.v3.plist\" \"${plist_directory}/com.hexela.dwell.daemon.v3.plist\"\nlocal_broker_configuration=\"${SRCROOT}/Config/Local/development-broker.json\"\nfallback_broker_configuration=\"${SRCROOT}/Config/development-broker.json\"\nbroker_configuration=\"\"\nif [ -f \"${local_broker_configuration}\" ]; then\n  broker_configuration=\"${local_broker_configuration}\"\nelif [ -f \"${fallback_broker_configuration}\" ]; then\n  broker_configuration=\"${fallback_broker_configuration}\"\nfi\nif [ -n \"${broker_configuration}\" ]; then\n  /usr/bin/ditto \"${broker_configuration}\" \"${daemon_directory}/development-broker.json\"\n  echo \"Embedded MQTT broker configuration from ${broker_configuration}\"\nelse\n  echo \"No development MQTT broker configuration found\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -613,8 +628,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA13B841503A67AF28B277CD /* CapabilityControlView.swift in Sources */,
+				E5C57379DC36C7EF31ECB63E /* CodeSigningIdentity.swift in Sources */,
 				CFC863AEFDDB8C184CFB51A2 /* DeviceListModel.swift in Sources */,
 				44F4C03E305B6289232FED18 /* DeviceListView.swift in Sources */,
+				85977E3D4A40E51129DC8F2F /* DeviceRowView.swift in Sources */,
 				E876A5C0BA71388A67BD9D7D /* DwellApp.swift in Sources */,
 				F2471C1F5B4731D569659877 /* DwellArchitectureView.swift in Sources */,
 				4FA009EE954AC80548DAD03E /* DwellRootView.swift in Sources */,
@@ -630,6 +648,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A4F0BAE9D53561DF7B86426 /* AdapterSupervisor.swift in Sources */,
+				3A59A165138BD976E163277E /* AdapterSupervisorTests.swift in Sources */,
 				A16E243D2C8233A04EA80B1C /* BrokerSessionTests.swift in Sources */,
 				6F644EE988573A5BDF8B13B2 /* CanonicalMessageDecoderTests.swift in Sources */,
 				CEDFB3167342C7F5DAA348C9 /* CanonicalSchemaTests.swift in Sources */,
@@ -638,6 +657,7 @@
 				E858A983C4DC7C964EB45DC3 /* DaemonRuntimeTests.swift in Sources */,
 				074F187828883E912D39E400 /* DeviceCommandDispatcher.swift in Sources */,
 				A41DFFC571248FED29342ED7 /* DeviceRegistryTests.swift in Sources */,
+				01406A9ECFA673361E3F9EA8 /* DeviceSnapshotCompatibilityTests.swift in Sources */,
 				AD56CA48318B2863F05D6329 /* DwellXPCService.swift in Sources */,
 				3188D1EDAF307BF58924BEBB /* DwellXPCServiceTests.swift in Sources */,
 				B8488B5CF316CC5586E634A8 /* FixtureSupport.swift in Sources */,
@@ -687,8 +707,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--timestamp --identifier com.hexela.dwell.daemon.v2";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hexela.dwell.daemon.v2;
+				OTHER_CODE_SIGN_FLAGS = "--timestamp --identifier com.hexela.dwell.daemon.v3";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hexela.dwell.daemon.v3;
 				PRODUCT_NAME = DwellDaemon;
 				SDKROOT = macosx;
 			};
@@ -727,8 +747,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				OTHER_CODE_SIGN_FLAGS = "--timestamp --identifier com.hexela.dwell.daemon.v2";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hexela.dwell.daemon.v2;
+				OTHER_CODE_SIGN_FLAGS = "--timestamp --identifier com.hexela.dwell.daemon.v3";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hexela.dwell.daemon.v3;
 				PRODUCT_NAME = DwellDaemon;
 				SDKROOT = macosx;
 			};
@@ -772,7 +792,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DY9P4K9PWF;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -835,7 +855,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DY9P4K9PWF;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -982,7 +1002,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Config/Entitlements/DwellApp.entitlements;
-				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Dwell;

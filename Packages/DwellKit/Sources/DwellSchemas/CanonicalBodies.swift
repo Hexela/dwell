@@ -89,6 +89,65 @@ public struct AvailabilityState: Codable, Equatable, Sendable {
     }
 }
 
+/// Describes one capability exposed by a canonical device component.
+public struct CapabilityMetadata: Codable, Equatable, Sendable {
+    public enum ValueKind: String, Codable, Sendable {
+        case boolean
+        case level
+        case quantity
+        case text
+    }
+
+    public let capability: String
+    public let displayName: String
+    public let valueKind: ValueKind
+    public let isWritable: Bool
+    public let unit: String?
+    public let minimum: Double?
+    public let maximum: Double?
+
+    public init(
+        capability: String,
+        displayName: String,
+        valueKind: ValueKind,
+        isWritable: Bool,
+        unit: String? = nil,
+        minimum: Double? = nil,
+        maximum: Double? = nil
+    ) {
+        self.capability = capability
+        self.displayName = displayName
+        self.valueKind = valueKind
+        self.isWritable = isWritable
+        self.unit = unit
+        self.minimum = minimum
+        self.maximum = maximum
+    }
+}
+
+/// Stable user-facing metadata for a canonical device component.
+public struct DeviceComponentMetadata: Codable, Equatable, Sendable {
+    public let deviceName: String
+    public let componentName: String
+    public let manufacturer: String?
+    public let model: String?
+    public let capabilities: [CapabilityMetadata]
+
+    public init(
+        deviceName: String,
+        componentName: String,
+        manufacturer: String? = nil,
+        model: String? = nil,
+        capabilities: [CapabilityMetadata]
+    ) {
+        self.deviceName = deviceName
+        self.componentName = componentName
+        self.manufacturer = manufacturer
+        self.model = model
+        self.capabilities = capabilities
+    }
+}
+
 /// The user or subsystem origin of a canonical command.
 public struct CommandOrigin: Codable, Equatable, Sendable {
     /// A recognized command origin.
@@ -221,6 +280,7 @@ public struct CommandAcknowledgement: Codable, Equatable, Sendable {
 
 /// A supported, validated canonical payload body.
 public enum CanonicalBody: Equatable, Sendable {
+    case deviceMetadata(DeviceComponentMetadata)
     case quantity(QuantityState)
     case boolean(BooleanState)
     case level(LevelState)

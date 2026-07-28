@@ -20,6 +20,13 @@ struct ServiceStatusView: View {
             if let snapshot = model.snapshot {
                 LabeledContent("Lifecycle", value: snapshot.lifecycle.title)
                 LabeledContent("Version", value: snapshot.serviceVersion)
+                if model.isServiceUpdateRecommended {
+                    Label(
+                        "This app contains daemon \(model.bundledServiceVersion). Update the service to use it.",
+                        systemImage: "arrow.trianglehead.2.clockwise.rotate.90"
+                    )
+                    .foregroundStyle(.orange)
+                }
                 LabeledContent(
                     "Uptime",
                     value: Duration.seconds(snapshot.uptimeSeconds).formatted()
@@ -35,6 +42,11 @@ struct ServiceStatusView: View {
 
             if let errorMessage = model.errorMessage {
                 Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.orange)
+            }
+
+            if let signingMessage = model.developmentSigningMessage {
+                Label(signingMessage, systemImage: "signature")
                     .foregroundStyle(.orange)
             }
 

@@ -82,8 +82,16 @@ final class DwellXPCService: NSObject, DwellXPCWireService, @unchecked Sendable 
 
         let replyBox = XPCDataReply(reply)
         Task {
-            let snapshot = await registry.snapshot()
-            sendDevice(.success(snapshot), using: replyBox.call)
+            do {
+                let commands = try await commandDispatcher.commandSnapshots()
+                let snapshot = await registry.snapshot(commands: commands)
+                sendDevice(.success(snapshot), using: replyBox.call)
+            } catch {
+                sendDevice(
+                    .failure(.serviceUnavailable),
+                    using: replyBox.call
+                )
+            }
         }
     }
 

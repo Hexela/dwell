@@ -10,6 +10,10 @@ import Foundation
 /// Reduces canonical device facts into immutable client snapshots.
 public actor DeviceRegistry {
     private struct DeviceState: Sendable {
+        var displayName: String?
+        var manufacturer: String?
+        var model: String?
+        var metadata: [String: CapabilityMetadata] = [:]
         var availability = "unknown"
         var capabilities: [String: CapabilitySnapshot] = [:]
         var revision: UInt64 = 0
@@ -27,6 +31,29 @@ public actor DeviceRegistry {
         now: Date = Date()
     ) {
         switch topic.route {
+        case let .deviceMetadata(device, _):
+            guard case let .deviceMetadata(metadata) = message.body else {
+                return
+            }
+            var state = devices[device, default: DeviceState()]
+            revision += 1
+            state.revision = revision
+            state.displayName = metadata.deviceName
+            state.manufacturer = metadata.manufacturer
+            state.model = metadata.model
+            for capability in metadata.capabilities {
+                state.metadata[capability.capability] = capability
+                if let existing = state.capabilities.first(
+                    where: { $0.value.capability == capability.capability }
+                ) {
+                    state.capabilities[existing.key] = Self.enrich(
+                        existing.value,
+                        with: capability
+                    )
+                }
+            }
+            devices[device] = state
+
         case let .deviceState(device, component, capability):
             guard let value = Self.value(from: message.body) else {
                 return
@@ -41,7 +68,7 @@ public actor DeviceRegistry {
             }
             revision += 1
             state.revision = revision
-            state.capabilities[key] = CapabilitySnapshot(
+            let snapshot = CapabilitySnapshot(
                 componentID: component,
                 capability: capability.rawValue,
                 value: value,
@@ -49,6 +76,9 @@ public actor DeviceRegistry {
                 revision: revision,
                 isStale: Self.isStale(message: message, now: now)
             )
+            state.capabilities[key] = state.metadata[capability.rawValue].map {
+                Self.enrich(snapshot, with: $0)
+            } ?? snapshot
             devices[device] = state
 
         case let .deviceAvailability(device):
@@ -67,17 +97,22 @@ public actor DeviceRegistry {
     }
 
     /// Returns all known devices in stable display order.
-    public func snapshot() -> DeviceCollectionSnapshot {
+    public func snapshot(
+        commands: [DeviceCommandSnapshot] = []
+    ) -> DeviceCollectionSnapshot {
         DeviceCollectionSnapshot(
             revision: revision,
             devices: devices.map { deviceID, state in
                 DeviceSnapshot(
                     deviceID: deviceID,
-                    displayName: Self.displayName(for: deviceID),
+                    displayName: state.displayName ?? Self.displayName(for: deviceID),
                     availability: state.availability,
                     capabilities: state.capabilities.values.sorted {
                         $0.id < $1.id
                     },
+                    manufacturer: state.manufacturer,
+                    model: state.model,
+                    commands: commands.filter { $0.deviceID == deviceID },
                     revision: state.revision
                 )
             }
@@ -89,6 +124,8 @@ public actor DeviceRegistry {
         from body: CanonicalBody
     ) -> CapabilitySnapshot.Value? {
         switch body {
+        case .deviceMetadata:
+            nil
         case let .quantity(value):
             .number(value.value, unit: value.unit)
         case let .boolean(value):
@@ -100,6 +137,24 @@ public actor DeviceRegistry {
         case .availability, .command, .acknowledgement:
             nil
         }
+    }
+
+    private static func enrich(
+        _ snapshot: CapabilitySnapshot,
+        with metadata: CapabilityMetadata
+    ) -> CapabilitySnapshot {
+        CapabilitySnapshot(
+            componentID: snapshot.componentID,
+            capability: snapshot.capability,
+            value: snapshot.value,
+            observedAt: snapshot.observedAt,
+            revision: snapshot.revision,
+            isStale: snapshot.isStale,
+            displayName: metadata.displayName,
+            isWritable: metadata.isWritable,
+            minimum: metadata.minimum,
+            maximum: metadata.maximum
+        )
     }
 
     private static func isStale(

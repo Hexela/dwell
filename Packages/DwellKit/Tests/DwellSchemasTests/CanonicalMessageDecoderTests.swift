@@ -117,6 +117,7 @@ struct CanonicalMessageDecoderTests {
 
 struct ValidMessageFixture: Sendable, CustomTestStringConvertible {
     enum Schema: String, Sendable {
+        case metadata = "io.dwell.device-metadata"
         case quantity = "io.dwell.state.quantity"
         case boolean = "io.dwell.state.boolean"
         case level = "io.dwell.state.level"
@@ -136,7 +137,8 @@ struct ValidMessageFixture: Sendable, CustomTestStringConvertible {
 
     func bodyMatches(_ body: CanonicalBody) -> Bool {
         switch (schema, body) {
-        case (.quantity, .quantity),
+        case (.metadata, .deviceMetadata),
+             (.quantity, .quantity),
              (.boolean, .boolean),
              (.level, .level),
              (.enumeration, .enumeration),
@@ -161,6 +163,11 @@ struct InvalidMessageFixture: Sendable, CustomTestStringConvertible {
 }
 
 let validMessageFixtures: [ValidMessageFixture] = [
+    ValidMessageFixture(
+        name: "device-metadata",
+        topic: "dwell/v1/i/home-a/device/kitchen-pendant/component/main/metadata",
+        schema: .metadata
+    ),
     ValidMessageFixture(
         name: "temperature",
         topic: "dwell/v1/i/home-a/device/hall-sensor/component/climate/state/sensor.temperature",

@@ -1,0 +1,35 @@
+{
+  "schema": "io.dwell.device-metadata/1.0",
+  "messageId": "metadata-001",
+  "source": {
+    "installationId": "home-a",
+    "integrationId": "zigbee-main"
+  },
+  "observedAt": "2026-07-28T08:00:00.000Z",
+  "publishedAt": "2026-07-28T08:00:00.000Z",
+  "quality": {
+    "status": "good"
+  },
+  "body": {
+    "deviceName": "Kitchen light",
+    "componentName": "Main",
+    "manufacturer": "Acme",
+    "model": "Dimmer 1",
+    "capabilities": [
+      {
+        "capability": "light.on",
+        "displayName": "Power",
+        "valueKind": "boolean",
+        "isWritable": true
+      },
+      {
+        "capability": "light.level",
+        "displayName": "Brightness",
+        "valueKind": "level",
+        "isWritable": true,
+        "minimum": 0,
+        "maximum": 1
+      }
+    ]
+  }
+}
